@@ -1,7 +1,8 @@
 :root {
     --primary: #999;
     --secondary: #777;
-    --active: #a4a
+    --active: #a4a;
+    --path: #4a4;
 }
 /*body {*/
 /*    background-color: var(--primary);*/
@@ -30,4 +31,7 @@
 }
 .node-active {
     background-color: var(--active);
+}
+.node-path {
+    background-color: var(--path);
 }

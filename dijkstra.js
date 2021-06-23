@@ -2,6 +2,8 @@ let solvedNodes = []
 let unsolvedNodes = []
 
 function dijkstraSearch({row, column, startingPoint, endPoint}) {
+    solvedNodes = []
+    unsolvedNodes = []
     solvedNodes.push({
         position: startingPoint,
         distance: 0,
@@ -49,12 +51,17 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
             activatePoint(targetNode.position, targetNode.distance)
         }
         if (targetNode.position[0]===endPoint[0]&&targetNode.position[1]===endPoint[1]) {
-            console.log('target reached: '+endPoint)
-            break
+            return extractShortestPath(solvedNodes, targetNode)
         }
     }
-    console.log('solved: '+solvedNodes.length)
-    solvedNodes.map(node => console.log(node.position))
-    console.log('unsolved: '+unsolvedNodes.length)
-    unsolvedNodes.map(node => console.log(node.position))
+}
+
+function extractShortestPath (solvedNodes, lastNode) {
+    let shortestPath = []
+    while (lastNode) {
+        shortestPath.unshift(lastNode.position)
+        if (!lastNode.prev) break
+        lastNode = solvedNodes.filter(node => node.position[0]===lastNode.prev[0] && node.position[1]===lastNode.prev[1])[0]
+    }
+    return shortestPath
 }

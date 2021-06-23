@@ -2,14 +2,34 @@ let row = 20
 let column = 50
 let startingPoint = [Math.round(row/2), Math.round(row/2)]
 let endPoint = [Math.round(row/2), column-Math.round(row/2)]
+let menus = {
+    start: 1,
+    end: 2,
+    wall: 3
+}
+let menuSelected = 2
+let mode = 0
 
 document.addEventListener('DOMContentLoaded', () => {
     plotGraph()
     indicateStartingPoint()
     indicateEndPoint()
 
-    document.querySelector('#visualize_btn').addEventListener('click', event => {
-        dijkstraSearch({row, column, startingPoint, endPoint})
+    if (mode===0) {
+        document.querySelector('#visualize_btn').addEventListener('click', event => {
+            let shortestPath = dijkstraSearch({row, column, startingPoint, endPoint})
+            visualizeShortestPath(shortestPath)
+            mode = 1
+        })
+    }
+    let graphBody = document.querySelector('#graph_body')
+    graphBody.addEventListener('click', event => {
+        clearEndPoint()
+        endPoint = [
+            Number(event.target.getAttribute('data-row')),
+            Number(event.target.getAttribute('data-column'))
+        ]
+        indicateEndPoint()
     })
 })
 
@@ -50,4 +70,20 @@ function indicateEndPoint() {
         .querySelector(`#node_row_${endPoint[0]}`)
         .querySelector(`#node_${endPoint[0]}_${endPoint[1]}`)
     node.innerHTML = 'X'
+}
+function clearEndPoint() {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${endPoint[0]}`)
+        .querySelector(`#node_${endPoint[0]}_${endPoint[1]}`)
+    node.innerHTML = ''
+}
+function visualizeShortestPath(shortestPath) {
+    shortestPath.map(point => {
+        let node = document
+            .querySelector('#graph_body')
+            .querySelector(`#node_row_${point[0]}`)
+            .querySelector(`#node_${point[0]}_${point[1]}`)
+        node.classList.add('node-path')
+    })
 }
