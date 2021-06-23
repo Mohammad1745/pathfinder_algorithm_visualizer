@@ -1,0 +1,26 @@
+:root {
+    --primary: #999;
+    --secondary: #777;
+}
+
+/*body {*/
+/*    background-color: var(--primary);*/
+/*}*/
+
+.cursor-pointer {
+    cursor: pointer;
+}
+.graph {
+    border-top: var(--primary) 1px solid;
+}
+.graph-body {
+    border-top: var(--primary) 1px solid;
+    border-bottom: var(--primary) 1px solid;
+}
+.node-row {
+    justify-content: center;
+}
+.node {
+    background-color: var(--secondary);
+    border: var(--primary) solid 1px;
+}
