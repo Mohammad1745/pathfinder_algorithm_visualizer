@@ -19,7 +19,7 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
             [lastNode.position[0]+1, lastNode.position[1]],
             [lastNode.position[0]-1, lastNode.position[1]],
         ]
-        updateNodesWithShortestDistance(nextNodePositions, lastNode)
+        updateNodesWithShortestDistance(row, column, nextNodePositions, lastNode)
         unsolvedNodes.sort((a, b) => a.distance-b.distance)
         let targetNode = unsolvedNodes.shift()
         let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
@@ -33,7 +33,7 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
     }
 }
 
-function updateNodesWithShortestDistance (nextNodePositions, lastNode) {
+function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNode) {
     nextNodePositions.map(nextNodePosition => {
         let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
         let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length>0
