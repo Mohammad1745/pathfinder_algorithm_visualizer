@@ -17,7 +17,7 @@ let modes = {
 let mode = modes.initial
 let algorithms = {
     dijkstra: {key: 1, name: "Dijkstra's Algorithm"},
-    // aStar: {key:2, name: "A* Search"}
+    aStar: {key:2, name: "A* Search"}
 }
 let algorithm = algorithms.dijkstra
 
@@ -47,15 +47,15 @@ function handleUserEvent () {
 
 function algorithmInputHandler() {
     let dijkstraAlgorithm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.dijkstra.key}`)
-    // let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
+    let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
     })
-    // aStarSearch.addEventListener('click', () => {
-    //     algorithm = algorithms.aStar
-    //     updateVisualizerButton()
-    // })
+    aStarSearch.addEventListener('click', () => {
+        algorithm = algorithms.aStar
+        updateVisualizerButton()
+    })
 }
 
 function visualizerButtonHandler () {
@@ -68,7 +68,7 @@ function visualizerButtonHandler () {
                 shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
             }
             else if (algorithm.key===algorithms.aStar.key) {
-                shortestPath = []
+                shortestPath = await aStarSearch({row, column, wall,startingPoint, endPoint})
             }
             await visualizeShortestPath(shortestPath)
             mode = modes.done
