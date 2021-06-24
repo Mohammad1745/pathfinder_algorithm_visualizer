@@ -8,7 +8,6 @@ async function dijkstraSearch({row, column, startingPoint, endPoint}) {
         position: startingPoint,
         distance: 0,
         prev: null,
-        solved: true,
         weight: 1
     })
     activatePoint(startingPoint)
@@ -52,7 +51,6 @@ function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNo
                     position: nextNodePosition,
                     distance: lastNode.distance+1,
                     prev: lastNode.position,
-                    solved: false,
                     weight: 1
                 })
             }
