@@ -50,7 +50,7 @@ function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNo
                 unsolvedNodes.push({
                     position: nextNodePosition,
                     distance: lastNode.distance+1,
-                    queuedDistance: distance(nextNodePosition, endPoint),
+                    queuedDistance: lastNode.distance+1+distance(nextNodePosition, endPoint),
                     prev: lastNode.position,
                     weight: 1
                 })
