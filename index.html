@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>Pathfinder Visualizer</title>
+    <link rel="icon" href ="public/images/path.png" type = "image/x-icon">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="public/css/style.css">
-
-    <title>Pathfinder Visualizer</title>
-    <link rel="icon" href ="public/images/path.png" type = "image/x-icon">
 
     <script src="public/js/scripts/helper.js" defer></script>
     <script src="public/js/algorithms/dijkstra.js" defer></script>
@@ -53,14 +53,6 @@
                     <button class="nav-link ml-2 btn btn-outline-danger" id="clear_btn">Clear</button>
                 </li>
             </ul>
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-                <li class="nav-item ml-auto">
-                    <a class="nav-link ml-2 btn btn-outline-info" href="https://gitlab.com/Mohammad1745/pathfinder_algorithm/-/tree/dev_mohammad" target="_blank">GitLab</a>
-                </li>
-                <li class="nav-item ml-auto">
-                    <a class="nav-link ml-2 btn btn-outline-info" href="https://github.com/Mohammad1745/pathfinder_algorithm_visualizer/tree/master" target="_blank">GitHub</a>
-                </li>
-            </ul>
         </div>
     </nav>
     <div class="graph m-3" id="graph">
@@ -79,6 +71,12 @@
         </div>
         <div class="graph-body" id="graph_body">
             <!-- Visualizer Graph -->
+        </div>
+        <div class="graph-footer" id="graph_footer">
+            <div class="m-0 p-2">
+                <a class="btn btn-outline-info" href="https://gitlab.com/Mohammad1745/pathfinder_algorithm/-/tree/dev_mohammad" target="_blank">GitLab</a>
+                <a class="ml-2 btn btn-outline-info" href="https://github.com/Mohammad1745/pathfinder_algorithm_visualizer/tree/master" target="_blank">GitHub</a>
+            </div>
         </div>
     </div>
 </div>
