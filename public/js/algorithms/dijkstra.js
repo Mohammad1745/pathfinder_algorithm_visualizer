@@ -8,7 +8,7 @@ let dijkstra = {
             prev: null,
             weight: 1
         })
-        activatePoint(startingPoint)
+        await activatePoint(startingPoint)
 
         while (true) {
             let lastNode = solvedNodes[solvedNodes.length - 1]
@@ -25,8 +25,7 @@ let dijkstra = {
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
             if (!matchedSolvedNode) {
                 solvedNodes.push(targetNode)
-                activatePoint(targetNode.position, targetNode.distance)
-                await sleep(SEARCH_TIME)
+                await activatePoint(targetNode.position, SEARCH_TIME)
             }
             if (targetNode.position.equals(endPoint)) {
                 return dijkstra.extractShortestPath(solvedNodes, targetNode)

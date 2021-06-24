@@ -212,13 +212,23 @@ function clearWall (point) {
     return isBrick
 }
 
-function activatePoint(point, distance=0) {
+function initiateActivationPoint(point, distance=0) {
     let node = document
         .querySelector('#graph_body')
         .querySelector(`#node_row_${point[0]}`)
         .querySelector(`#node_${point[0]}_${point[1]}`)
-    node.classList.add('node-active')
     // node.innerHTML = distance+''
+}
+
+async function activatePoint(point, delay=0) {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${point[0]}`)
+        .querySelector(`#node_${point[0]}_${point[1]}`)
+    node.classList.add('node-initiate-activation')
+    await sleep(delay)
+    node.classList.remove('node-initiate-activation')
+    node.classList.add('node-active')
 }
 
 function indicateStartingPoint() {
@@ -275,7 +285,9 @@ async function visualizeShortestPath(shortestPath) {
             .querySelector('#graph_body')
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
-        node.classList.add('node-path')
+        node.classList.add('node-initiate-path')
         await sleep(PATH_TIME)
+        node.classList.remove('node-initiate-path')
+        node.classList.add('node-path')
     }
 }

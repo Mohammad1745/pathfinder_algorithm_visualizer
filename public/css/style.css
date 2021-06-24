@@ -1,7 +1,9 @@
 :root {
     --primary: #999;
     --secondary: #777;
+    --initiate-activation: #ddf;
     --active: #00539CFF;
+    --initate-path: #d77;
     --path: #4a4;
     --wall: #000;
 }
@@ -36,8 +38,14 @@
     height: 20px;
     width: 20px;
 }
+.node-initiate-activation {
+    background-color: var(--initiate-activation);
+}
 .node-active {
     background-color: var(--active);
+}
+.node-initiate-path {
+    background-color: var(--initate-path);
 }
 .node-path {
     background-color: var(--path);
