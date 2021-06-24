@@ -19,31 +19,11 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
             [lastNode.position[0]+1, lastNode.position[1]],
             [lastNode.position[0]-1, lastNode.position[1]],
         ]
-        nextNodePositions.map(nextNodePosition => {
-            let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
-            let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length>0
-            if (!isSolvedNode && isNodeValid) {
-                let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
-                if (matchedUnsolvedNode[0]) {
-                    if (lastNode.distance+1 < matchedUnsolvedNode.distance) {
-                        matchedUnsolvedNode.distance = lastNode.distance+1
-                        matchedUnsolvedNode.prev = lastNode.position
-                    }
-                } else {
-                    unsolvedNodes.push({
-                        position: nextNodePosition,
-                        distance: lastNode.distance+1,
-                        prev: lastNode.position,
-                        solved: false,
-                        weight: 1
-                    })
-                }
-            }
-        })
+        updateNodesWithShortestDistance(nextNodePositions, lastNode)
         unsolvedNodes.sort((a, b) => a.distance-b.distance)
         let targetNode = unsolvedNodes.shift()
-        let matchedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
-        if (!matchedNode) {
+        let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
+        if (!matchedSolvedNode) {
             solvedNodes.push(targetNode)
             activatePoint(targetNode.position, targetNode.distance)
         }
@@ -51,6 +31,30 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
             return extractShortestPath(solvedNodes, targetNode)
         }
     }
+}
+
+function updateNodesWithShortestDistance (nextNodePositions, lastNode) {
+    nextNodePositions.map(nextNodePosition => {
+        let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
+        let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length>0
+        if (!isSolvedNode && isNodeValid) {
+            let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
+            if (matchedUnsolvedNode[0]) {
+                if (lastNode.distance+1 < matchedUnsolvedNode.distance) {
+                    matchedUnsolvedNode.distance = lastNode.distance+1
+                    matchedUnsolvedNode.prev = lastNode.position
+                }
+            } else {
+                unsolvedNodes.push({
+                    position: nextNodePosition,
+                    distance: lastNode.distance+1,
+                    prev: lastNode.position,
+                    solved: false,
+                    weight: 1
+                })
+            }
+        }
+    })
 }
 
 function extractShortestPath (lastNode) {
