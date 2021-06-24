@@ -47,15 +47,15 @@ function handleUserEvent () {
 
 function algorithmInputHandler() {
     let dijkstraAlgorithm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.dijkstra.key}`)
-    let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
+    // let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
     })
-    aStarSearch.addEventListener('click', () => {
-        algorithm = algorithms.aStar
-        updateVisualizerButton()
-    })
+    // aStarSearch.addEventListener('click', () => {
+    //     algorithm = algorithms.aStar
+    //     updateVisualizerButton()
+    // })
 }
 
 function visualizerButtonHandler () {
