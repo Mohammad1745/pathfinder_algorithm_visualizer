@@ -118,7 +118,7 @@ function menuHandler() {
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     let graphBody = document.querySelector('#graph_body')
-    graphBody.addEventListener('click', event => {
+    graphBody.addEventListener('mousedown', event => {
         if (mode===modes.initial && menuSelected===menus.start){
             clearStartingPoint()
             startingPoint = [
