@@ -1,7 +1,7 @@
 let solvedNodes = []
 let unsolvedNodes = []
 
-function dijkstraSearch({row, column, startingPoint, endPoint}) {
+async function dijkstraSearch({row, column, startingPoint, endPoint}) {
     solvedNodes = []
     unsolvedNodes = []
     solvedNodes.push({
@@ -28,6 +28,7 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
         if (!matchedSolvedNode) {
             solvedNodes.push(targetNode)
             activatePoint(targetNode.position, targetNode.distance)
+            await sleep(10)
         }
         if (targetNode.position.equals(endPoint)) {
             return extractShortestPath(targetNode)
@@ -73,5 +74,9 @@ Array.prototype.equals = function(arr2) {
     return (
         this.length === arr2.length &&
         this.every((value, index) => value === arr2[index])
-    );
-};
+    )
+}
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}

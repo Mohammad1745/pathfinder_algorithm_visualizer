@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     indicateEndPoint()
 
     if (mode===0) {
-        document.querySelector('#visualize_btn').addEventListener('click', event => {
+        document.querySelector('#visualize_btn').addEventListener('click', async event => {
             clearGraph()
-            let shortestPath = dijkstraSearch({row, column, startingPoint, endPoint})
-            visualizeShortestPath(shortestPath)
+            indicateStartingPoint()
+            indicateEndPoint()
+            let shortestPath = await dijkstraSearch({row, column, startingPoint, endPoint})
+            await visualizeShortestPath(shortestPath)
             mode = 0
         })
     }
@@ -66,7 +68,7 @@ function activatePoint(point, distance=0) {
         .querySelector(`#node_row_${point[0]}`)
         .querySelector(`#node_${point[0]}_${point[1]}`)
     node.classList.add('node-active')
-    node.innerHTML = distance+''
+    // node.innerHTML = distance+''
 }
 function indicateStartingPoint() {
     let node = document
@@ -89,12 +91,16 @@ function clearEndPoint() {
         .querySelector(`#node_${endPoint[0]}_${endPoint[1]}`)
     node.innerHTML = ''
 }
-function visualizeShortestPath(shortestPath) {
-    shortestPath.map(point => {
+async function visualizeShortestPath(shortestPath) {
+    for(let point of shortestPath) {
         let node = document
             .querySelector('#graph_body')
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-path')
-    })
+        await sleepx(100)
+    }
+}
+const sleepx = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
