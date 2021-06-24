@@ -1,3 +1,6 @@
+const PATH_TIME = 50
+const SEARCH_TIME = 10
+
 Array.prototype.equals = function(arr2) {
     return (
         this.length === arr2.length &&

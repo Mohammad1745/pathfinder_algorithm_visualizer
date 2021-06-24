@@ -27,7 +27,7 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
         if (!matchedSolvedNode) {
             solvedNodes.push(targetNode)
             activatePoint(targetNode.position, targetNode.distance)
-            await sleep(10)
+            await sleep(SEARCH_TIME)
         }
         if (targetNode.position.equals(endPoint)) {
             return extractShortestPath(targetNode)
