@@ -94,12 +94,15 @@ function clearButtonHandler () {
 function menuHandler() {
     document.querySelector('#starting_point_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.start
+        else if (mode === modes.done) alert('Clear The Graph First')
     })
     document.querySelector('#end_point_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.end
+        else if (mode === modes.done) alert('Clear The Graph First')
     })
     document.querySelector('#wall_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.wall
+        else if (mode === modes.done) alert('Clear The Graph First')
     })
     let graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('click', event => {
