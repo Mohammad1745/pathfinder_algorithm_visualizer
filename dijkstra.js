@@ -32,6 +32,9 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
         if (targetNode.position.equals(endPoint)) {
             return extractShortestPath(targetNode)
         }
+        if (!unsolvedNodes.length) {
+            return []
+        }
     }
 }
 

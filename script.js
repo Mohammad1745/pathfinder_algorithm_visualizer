@@ -16,32 +16,71 @@ let modes = {
 }
 let mode = modes.initial
 let algorithms = {
-    dijkstra: 1,
-    // aStar: 2
+    dijkstra: {key: 1, name: "Dijkstra's Algorithm"},
+    // aStar: {key:2, name: "A* Search"}
 }
 let algorithm = algorithms.dijkstra
 
 document.addEventListener('DOMContentLoaded', () => {
     showAlgorithmList()
+    updateVisualizerButton()
     plotGraph()
     indicateStartingPoint()
     indicateEndPoint()
     handleUserEvent()
 })
 
+function showAlgorithmList() {
+    let algorithmList = document.querySelector('#algorithm_list')
+    Object.keys(algorithms).map(index => {
+        algorithmList.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="algorithm_${algorithms[index].key}">${algorithms[index].name}</a>`)
+    })
+
+}
+
 function handleUserEvent () {
-    document.querySelector('#visualize_btn').addEventListener('click', async event => {
+    algorithmInputHandler()
+    visualizerButtonHandler()
+    clearButtonHandler()
+    menuHandler()
+}
+
+function algorithmInputHandler() {
+    let dijkstraAlgorithm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.dijkstra.key}`)
+    let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
+    dijkstraAlgorithm.addEventListener('click', () => {
+        algorithm = algorithms.dijkstra
+        updateVisualizerButton()
+    })
+    aStarSearch.addEventListener('click', () => {
+        algorithm = algorithms.aStar
+        updateVisualizerButton()
+    })
+}
+
+function visualizerButtonHandler () {
+    let visualizerButton = document.querySelector('#visualize_btn')
+    visualizerButton.addEventListener('click', async event => {
         if (mode===modes.initial) {
-            mode =  modes.searching
+            mode = modes.searching
             let shortestPath = []
-            if (algorithm===algorithms.dijkstra) {
-                 shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
+            if (algorithm.key===algorithms.dijkstra.key) {
+                shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
+            }
+            else if (algorithm.key===algorithms.aStar.key) {
+                shortestPath = []
             }
             await visualizeShortestPath(shortestPath)
             mode = modes.done
+        } else if (mode === modes.done) {
+            alert('Clear The Graph First')
         }
     })
-    document.querySelector('#clear_btn').addEventListener('click', async event => {
+}
+
+function clearButtonHandler () {
+    let clearButton = document.querySelector('#clear_btn')
+    clearButton.addEventListener('click', async event => {
         if (mode===modes.done){
             clearGraph()
             indicateStartingPoint()
@@ -50,6 +89,9 @@ function handleUserEvent () {
             mode = modes.initial
         }
     })
+}
+
+function menuHandler() {
     document.querySelector('#starting_point_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.start
     })
@@ -85,13 +127,17 @@ function handleUserEvent () {
     })
     graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('dragenter', event => {
-        plotWall(event)
+        if (mode===modes.initial && menuSelected===menus.wall){
+            plotWall(event)
+        }
     })
 }
 
-function showAlgorithmList() {
-    let list = document.querySelector('#algorithm_list')
-    list.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="algorithm_${algorithms.dijkstra}">Dijkstra's Algorithm</a>`)
+function updateVisualizerButton() {
+    let visualizerButton = document.querySelector('#visualize_btn')
+    visualizerButton.innerHTML = `Visualize ${algorithm.name}`
+    let algorithmMessage = document.querySelector('#algorithm_message')
+    algorithmMessage.innerHTML = algorithm.name
 }
 
 function plotGraph() {
@@ -126,13 +172,13 @@ function plotWall (event) {
         Number(event.target.getAttribute('data-row')),
         Number(event.target.getAttribute('data-column'))
     ]
-    let inWall = clearWall(point)
-    if (!inWall) {
-        wall.push({x:point[0], y:point[1]})
-        indicateWallBrick(point)
-        console.log('not in wall')
+    if (!(point.equals(startingPoint)||point.equals(endPoint))){
+        let inWall = clearWall(point)
+        if (!inWall) {
+            wall.push({x:point[0], y:point[1]})
+            indicateWallBrick(point)
+        }
     }
-    console.log(wall, 'wall')
 }
 
 function clearWall (point) {
@@ -161,7 +207,7 @@ function indicateStartingPoint() {
         .querySelector('#graph_body')
         .querySelector(`#node_row_${startingPoint[0]}`)
         .querySelector(`#node_${startingPoint[0]}_${startingPoint[1]}`)
-    node.innerHTML = 'S'
+    node.insertAdjacentHTML('beforeend', '<i class="fa fa-chevron-right" aria-hidden="true"></i>')
 }
 
 function clearStartingPoint() {
@@ -177,7 +223,7 @@ function indicateEndPoint() {
         .querySelector('#graph_body')
         .querySelector(`#node_row_${endPoint[0]}`)
         .querySelector(`#node_${endPoint[0]}_${endPoint[1]}`)
-    node.innerHTML = 'E'
+    node.insertAdjacentHTML('beforeend', '<i class="fa fa-bullseye" aria-hidden="true"></i>')
 }
 
 function clearEndPoint() {
