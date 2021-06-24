@@ -61,20 +61,21 @@ function algorithmInputHandler() {
 function visualizerButtonHandler () {
     let visualizerButton = document.querySelector('#visualize_btn')
     visualizerButton.addEventListener('click', async event => {
-        if (mode===modes.initial) {
-            mode = modes.searching
-            let shortestPath = []
-            if (algorithm.key===algorithms.dijkstra.key) {
-                shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
-            }
-            else if (algorithm.key===algorithms.aStar.key) {
-                shortestPath = await aStarSearch({row, column, wall,startingPoint, endPoint})
-            }
-            await visualizeShortestPath(shortestPath)
-            mode = modes.done
-        } else if (mode === modes.done) {
-            alert(CLEAR_GRAPH_MESSAGE)
+        if (mode === modes.done) {
+            clearGraph()
+            indicateStartingPoint()
+            indicateEndPoint()
         }
+        mode = modes.searching
+        let shortestPath = []
+        if (algorithm.key===algorithms.dijkstra.key) {
+            shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
+        }
+        else if (algorithm.key===algorithms.aStar.key) {
+            shortestPath = await aStarSearch({row, column, wall,startingPoint, endPoint})
+        }
+        await visualizeShortestPath(shortestPath)
+        mode = modes.done
     })
 }
 
@@ -82,7 +83,7 @@ function clearButtonHandler () {
     let clearButton = document.querySelector('#clear_btn')
     clearButton.addEventListener('click', async event => {
         if (mode===modes.done){
-            clearGraph()
+            clearGraph(true)
             indicateStartingPoint()
             indicateEndPoint()
             wall = []
@@ -158,13 +159,14 @@ function plotGraph() {
     }
 }
 
-function clearGraph() {
+function clearGraph(clearWall=false) {
     let graphBody = document.querySelector('#graph_body')
     for (let i=0; i<row; i++) {
         let nodeRow = graphBody.querySelector(`#node_row_${i}`)
         for (let j=0; j<column; j++) {
             let node = nodeRow.querySelector(`#node_${i}_${j}`)
-            node.classList.remove('node-active', 'node-path', 'node-wall')
+            if (clearWall) node.classList.remove('node-wall')
+            node.classList.remove('node-active', 'node-path')
             node.innerHTML=""
         }
     }
