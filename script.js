@@ -17,13 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mode===0) {
         document.querySelector('#visualize_btn').addEventListener('click', event => {
+            clearGraph()
             let shortestPath = dijkstraSearch({row, column, startingPoint, endPoint})
             visualizeShortestPath(shortestPath)
-            mode = 1
+            mode = 0
         })
     }
     let graphBody = document.querySelector('#graph_body')
-    graphBody.addEventListener('click', event => {
+    graphBody.addEventListener('mousedown', event => {
         clearEndPoint()
         endPoint = [
             Number(event.target.getAttribute('data-row')),
@@ -47,6 +48,17 @@ function plotGraph() {
         }
     }
 }
+function clearGraph() {
+    let graphBody = document.querySelector('#graph_body')
+    for (let i=0; i<row; i++) {
+        let nodeRow = graphBody.querySelector(`#node_row_${i}`)
+        for (let j=0; j<column; j++) {
+            let node = nodeRow.querySelector(`#node_${i}_${j}`)
+            node.classList.remove('node-active', 'node-path')
+            node.innerHTML=""
+        }
+    }
+}
 
 function activatePoint(point, distance=0) {
     let node = document
@@ -56,7 +68,6 @@ function activatePoint(point, distance=0) {
     node.classList.add('node-active')
     node.innerHTML = distance+''
 }
-
 function indicateStartingPoint() {
     let node = document
         .querySelector('#graph_body')

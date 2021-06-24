@@ -2,6 +2,8 @@ let solvedNodes = []
 let unsolvedNodes = []
 
 function dijkstraSearch({row, column, startingPoint, endPoint}) {
+    solvedNodes = []
+    unsolvedNodes = []
     solvedNodes.push({
         position: startingPoint,
         distance: 0,
@@ -28,7 +30,7 @@ function dijkstraSearch({row, column, startingPoint, endPoint}) {
             activatePoint(targetNode.position, targetNode.distance)
         }
         if (targetNode.position.equals(endPoint)) {
-            return extractShortestPath(solvedNodes, targetNode)
+            return extractShortestPath(targetNode)
         }
     }
 }
