@@ -5,7 +5,7 @@ let greedyBestFirst = {
         solvedNodes.push({
             position: startingPoint,
             distance: 0,
-            queuedDistance: distance(startingPoint, endPoint),
+            endDistance: distance(startingPoint, endPoint),
             prev: null,
             weight: 1
         })
@@ -20,7 +20,7 @@ let greedyBestFirst = {
                 [lastNode.position[0]-1, lastNode.position[1]],
             ]
             greedyBestFirst.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall)
-            unsolvedNodes.sort((a, b) => a.queuedDistance-b.queuedDistance)
+            unsolvedNodes.sort((a, b) => a.endDistance-b.endDistance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
@@ -51,7 +51,7 @@ let greedyBestFirst = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         distance: lastNode.distance+1,
-                        queuedDistance: distance(nextNodePosition, endPoint),
+                        endDistance: distance(nextNodePosition, endPoint),
                         prev: lastNode.position,
                         weight: 1
                     })
