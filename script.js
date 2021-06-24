@@ -60,6 +60,7 @@ function algorithmInputHandler() {
 
 function visualizerButtonHandler () {
     let visualizerButton = document.querySelector('#visualize_btn')
+    let statusMessage = document.querySelector('#status_message')
     visualizerButton.addEventListener('click', async event => {
         if (mode === modes.done) {
             clearGraph()
@@ -67,6 +68,7 @@ function visualizerButtonHandler () {
             indicateEndPoint()
         }
         mode = modes.searching
+        statusMessage.innerHTML = `Searching`
         let shortestPath = []
         if (algorithm.key===algorithms.dijkstra.key) {
             shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
@@ -76,6 +78,7 @@ function visualizerButtonHandler () {
         }
         await visualizeShortestPath(shortestPath)
         mode = modes.done
+        statusMessage.innerHTML = `Shortest Distance: ${shortestPath.length-1}`
     })
 }
 
@@ -142,6 +145,8 @@ function updateVisualizerButton() {
     visualizerButton.innerHTML = `Visualize ${algorithm.name}`
     let algorithmMessage = document.querySelector('#algorithm_message')
     algorithmMessage.innerHTML = algorithm.name
+    let statusMessage = document.querySelector('#status_message')
+    statusMessage.innerHTML = ``
 }
 
 function plotGraph() {
