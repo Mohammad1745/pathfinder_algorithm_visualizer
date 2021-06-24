@@ -3,6 +3,7 @@
     --secondary: #777;
     --active: #a4a;
     --path: #4a4;
+    --wall: #000;
 }
 /*body {*/
 /*    background-color: var(--primary);*/
@@ -34,4 +35,7 @@
 }
 .node-path {
     background-color: var(--path);
+}
+.node-wall {
+    background-color: var(--wall);
 }

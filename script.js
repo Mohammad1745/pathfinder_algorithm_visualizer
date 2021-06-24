@@ -2,6 +2,7 @@ let row = 20
 let column = 50
 let startingPoint = [Math.round(row/2), Math.round(row/2)]
 let endPoint = [Math.round(row/2), column-Math.round(row/2)]
+let wall = []
 let menus = {
     start: 1,
     end: 2,
@@ -20,20 +21,41 @@ document.addEventListener('DOMContentLoaded', () => {
             clearGraph()
             indicateStartingPoint()
             indicateEndPoint()
-            let shortestPath = await dijkstraSearch({row, column, startingPoint, endPoint})
+            let shortestPath = await dijkstraSearch({row, column, wall,startingPoint, endPoint})
             await visualizeShortestPath(shortestPath)
             mode = 0
         })
     }
     let graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('mousedown', event => {
-        clearEndPoint()
-        endPoint = [
+        let point = [
             Number(event.target.getAttribute('data-row')),
             Number(event.target.getAttribute('data-column'))
         ]
-        indicateEndPoint()
+        let inWall = false
+        for (let brick of wall) {
+            if (point.equals([brick.x, brick.y])){
+                let index = wall.indexOf(brick)
+                wall.splice(index, 1)
+                clearWallBrick(point)
+                inWall = true
+            }
+        }
+        if (!inWall) {
+            wall.push({x:point[0], y:point[1]})
+            indicateWallBrick(point)
+            console.log('not in wall')
+        }
+        console.log(wall, 'wall')
     })
+    // graphBody.addEventListener('mouseup', event => {
+    //     clearEndPoint()
+    //     endPoint = [
+    //         Number(event.target.getAttribute('data-row')),
+    //         Number(event.target.getAttribute('data-column'))
+    //     ]
+    //     indicateEndPoint()
+    // })
 })
 
 function plotGraph() {
@@ -91,6 +113,20 @@ function clearEndPoint() {
         .querySelector(`#node_${endPoint[0]}_${endPoint[1]}`)
     node.innerHTML = ''
 }
+function indicateWallBrick(point) {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${point[0]}`)
+        .querySelector(`#node_${point[0]}_${point[1]}`)
+    node.classList.add('node-wall')
+}
+function clearWallBrick(point) {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${point[0]}`)
+        .querySelector(`#node_${point[0]}_${point[1]}`)
+    node.classList.remove('node-wall')
+}
 async function visualizeShortestPath(shortestPath) {
     for(let point of shortestPath) {
         let node = document
@@ -98,9 +134,6 @@ async function visualizeShortestPath(shortestPath) {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-path')
-        await sleepx(100)
+        await sleep(100)
     }
-}
-const sleepx = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }

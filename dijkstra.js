@@ -1,7 +1,7 @@
 let solvedNodes = []
 let unsolvedNodes = []
 
-async function dijkstraSearch({row, column, startingPoint, endPoint}) {
+async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
     solvedNodes = []
     unsolvedNodes = []
     solvedNodes.push({
@@ -20,7 +20,7 @@ async function dijkstraSearch({row, column, startingPoint, endPoint}) {
             [lastNode.position[0]+1, lastNode.position[1]],
             [lastNode.position[0]-1, lastNode.position[1]],
         ]
-        updateNodesWithShortestDistance(row, column, nextNodePositions, lastNode)
+        updateNodesWithShortestDistance(row, column, nextNodePositions, lastNode, wall)
         unsolvedNodes.sort((a, b) => a.distance-b.distance)
         let targetNode = unsolvedNodes.shift()
         let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
@@ -35,11 +35,12 @@ async function dijkstraSearch({row, column, startingPoint, endPoint}) {
     }
 }
 
-function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNode) {
+function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNode, wall) {
     nextNodePositions.map(nextNodePosition => {
         let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
+        let isWallBrick = wall.filter(brick => nextNodePosition.equals([brick.x, brick.y])).length>0
         let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length>0
-        if (!isSolvedNode && isNodeValid) {
+        if (!isSolvedNode && isNodeValid && !isWallBrick) {
             let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
             if (matchedUnsolvedNode[0]) {
                 if (lastNode.distance+1 < matchedUnsolvedNode.distance) {
@@ -66,15 +67,4 @@ function extractShortestPath (lastNode) {
         lastNode = solvedNodes.filter(node => node.position.equals(lastNode.prev))[0]
     }
     return shortestPath
-}
-
-Array.prototype.equals = function(arr2) {
-    return (
-        this.length === arr2.length &&
-        this.every((value, index) => value === arr2[index])
-    )
-}
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
