@@ -175,6 +175,7 @@ function plotGraph() {
 
 function clearGraph(clearWall=false) {
     let graphBody = document.querySelector('#graph_body')
+    let nodeSize = Math.floor(graphBody.offsetWidth/column-1)
     for (let i=0; i<row; i++) {
         let nodeRow = graphBody.querySelector(`#node_row_${i}`)
         for (let j=0; j<column; j++) {
@@ -182,6 +183,8 @@ function clearGraph(clearWall=false) {
             if (clearWall) node.classList.remove('node-wall')
             node.classList.remove('node-active', 'node-path')
             node.innerHTML=""
+            node.style.width = nodeSize+"px"
+            node.style.height = nodeSize+"px"
         }
     }
 }
