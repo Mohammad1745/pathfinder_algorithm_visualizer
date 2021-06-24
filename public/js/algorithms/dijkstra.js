@@ -1,9 +1,6 @@
-let solvedNodes = []
-let unsolvedNodes = []
-
 async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
-    solvedNodes = []
-    unsolvedNodes = []
+    let solvedNodes = []
+    let unsolvedNodes = []
     solvedNodes.push({
         position: startingPoint,
         distance: 0,
@@ -20,7 +17,7 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
             [lastNode.position[0]+1, lastNode.position[1]],
             [lastNode.position[0]-1, lastNode.position[1]],
         ]
-        updateNodesWithShortestDistance(row, column, nextNodePositions, lastNode, wall)
+        updateNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall)
         unsolvedNodes.sort((a, b) => a.distance-b.distance)
         if (!unsolvedNodes.length) return []
         let targetNode = unsolvedNodes.shift()
@@ -31,12 +28,12 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
             await sleep(SEARCH_TIME)
         }
         if (targetNode.position.equals(endPoint)) {
-            return extractShortestPath(targetNode)
+            return extractShortestPath(solvedNodes, targetNode)
         }
     }
 }
 
-function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNode, wall) {
+function updateNodesWithShortestDistance (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall) {
     nextNodePositions.map(nextNodePosition => {
         let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
         let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length>0
@@ -60,7 +57,7 @@ function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNo
     })
 }
 
-function extractShortestPath (lastNode) {
+function extractShortestPath (solvedNodes, lastNode) {
     let shortestPath = []
     while (lastNode) {
         shortestPath.unshift(lastNode.position)
