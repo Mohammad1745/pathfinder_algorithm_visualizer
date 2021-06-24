@@ -1,5 +1,6 @@
 let solvedNodes = []
 let unsolvedNodes = []
+let endCount = 0
 
 async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
     solvedNodes = []
@@ -33,7 +34,8 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
             return extractShortestPath(targetNode)
         }
         if (!unsolvedNodes.length) {
-            return []
+            if (endCount>row*column) return []
+            else endCount++
         }
     }
 }
@@ -41,7 +43,7 @@ async function dijkstraSearch({row, column, wall, startingPoint, endPoint}) {
 function updateNodesWithShortestDistance (row, column, nextNodePositions, lastNode, wall) {
     nextNodePositions.map(nextNodePosition => {
         let isNodeValid = nextNodePosition[0]>=0 && nextNodePosition[0]<row && nextNodePosition[1]>=0 && nextNodePosition[1]<column
-        let isWallBrick = wall.filter(brick => nextNodePosition.equals([brick.x, brick.y])).length>0
+        let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length>0
         let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length>0
         if (!isSolvedNode && isNodeValid && !isWallBrick) {
             let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))

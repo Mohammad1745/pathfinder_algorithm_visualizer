@@ -1,5 +1,6 @@
 const PATH_TIME = 50
 const SEARCH_TIME = 10
+const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 Array.prototype.equals = function(arr2) {
     return (

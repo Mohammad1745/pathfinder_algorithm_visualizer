@@ -73,7 +73,7 @@ function visualizerButtonHandler () {
             await visualizeShortestPath(shortestPath)
             mode = modes.done
         } else if (mode === modes.done) {
-            alert('Clear The Graph First')
+            alert(CLEAR_GRAPH_MESSAGE)
         }
     })
 }
@@ -94,15 +94,15 @@ function clearButtonHandler () {
 function menuHandler() {
     document.querySelector('#starting_point_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.start
-        else if (mode === modes.done) alert('Clear The Graph First')
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     document.querySelector('#end_point_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.end
-        else if (mode === modes.done) alert('Clear The Graph First')
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     document.querySelector('#wall_btn').addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.wall
-        else if (mode === modes.done) alert('Clear The Graph First')
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     let graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('click', event => {
@@ -178,22 +178,22 @@ function plotWall (event) {
     if (!(point.equals(startingPoint)||point.equals(endPoint))){
         let inWall = clearWall(point)
         if (!inWall) {
-            wall.push({x:point[0], y:point[1]})
+            wall.unshift(point)
             indicateWallBrick(point)
         }
     }
 }
 
 function clearWall (point) {
-    for (let brick of wall) {
-        if (point.equals([brick.x, brick.y])){
-            let index = wall.indexOf(brick)
+    let isBrick = false
+    wall.map((brick, index) => {
+        if (point.equals(brick)){
             wall.splice(index, 1)
             clearWallBrick(point)
-            return true
+            isBrick = true
         }
-    }
-    return false
+    })
+    return isBrick
 }
 
 function activatePoint(point, distance=0) {
