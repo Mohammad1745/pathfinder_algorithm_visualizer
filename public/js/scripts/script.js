@@ -103,13 +103,17 @@ function algorithmInputHandler() {
 function mazeInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
     none.addEventListener('click', async () => {
-        wall = []
-        await plotMaze()
+        if (mode===modes.initial) {
+            wall = []
+            await plotMaze()
+        }
     })
     let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
     simpleStairButton.addEventListener('click', async () => {
-        wall = simpleStair.generate({row, column, startingPoint, endPoint})
-        await plotMaze()
+        if (mode===modes.initial) {
+            wall = pattern.simpleStair({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
     })
 }
 

@@ -1,5 +1,5 @@
-let simpleStair = {
-    generate: ({row, column, startingPoint, endPoint}) => {
+let pattern = {
+    simpleStair: ({row, column, startingPoint, endPoint}) => {
         let maze = []
         let r = row-3
         let iterator = -1
