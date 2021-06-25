@@ -53,8 +53,9 @@ let biDirectionalSwarm = {
                 solvedNodesFromEnd.push(targetNodeFromEnd)
                 await activatePoint(targetNodeFromEnd.position, SEARCH_TIME)
             }
-            if (biDirectionalSwarm.duplicate(solvedNodesFromStart, solvedNodesFromEnd)) {
-                return biDirectionalSwarm.extractShortestPath(solvedNodesFromStart, solvedNodesFromEnd, targetNodeFromStart, targetNodeFromEnd)
+            let duplicateNodes = biDirectionalSwarm.duplicateNodes(solvedNodesFromStart, solvedNodesFromEnd)
+            if (duplicateNodes) {
+                return biDirectionalSwarm.extractShortestPath(solvedNodesFromStart, solvedNodesFromEnd, duplicateNodes)
             }
         }
     },
@@ -84,27 +85,30 @@ let biDirectionalSwarm = {
         })
     },
 
-    extractShortestPath: (solvedNodesFromStart, solvedNodesFromEnd, lastNodeFromStart, lastNodeFromEnd) => {
+    extractShortestPath: (solvedNodesFromStart, solvedNodesFromEnd, duplicateNodes) => {
         let shortestPath = []
-        while (lastNodeFromEnd) {
-            shortestPath.unshift(lastNodeFromEnd.position)
-            if (!lastNodeFromEnd.prev) break
-            lastNodeFromEnd = solvedNodesFromEnd.filter(node => node.position.equals(lastNodeFromEnd.prev))[0]
+        let lastNode = duplicateNodes[1]
+        while (lastNode) {
+            shortestPath.unshift(lastNode.position)
+            if (!lastNode.prev) break
+            lastNode = solvedNodesFromEnd.filter(node => node.position.equals(lastNode.prev))[0]
         }
+        shortestPath.pop()
         shortestPath.reverse()
-        while (lastNodeFromStart) {
-            shortestPath.unshift(lastNodeFromStart.position)
-            if (!lastNodeFromStart.prev) break
-            lastNodeFromStart = solvedNodesFromStart.filter(node => node.position.equals(lastNodeFromStart.prev))[0]
+        lastNode = duplicateNodes[0]
+        while (lastNode) {
+            shortestPath.unshift(lastNode.position)
+            if (!lastNode.prev) break
+            lastNode = solvedNodesFromStart.filter(node => node.position.equals(lastNode.prev))[0]
         }
         return shortestPath
     },
 
-    duplicate : (nodeList1, nodeList2) => {
-        for (let value1 of nodeList1) {
-            for(let value2 of nodeList2) {
-                if (value1.position.equals(value2.position)){
-                    return true
+    duplicateNodes : (nodeList1, nodeList2) => {
+        for (let node1 of nodeList1) {
+            for(let node2 of nodeList2) {
+                if (node1.position.equals(node2.position)){
+                    return [node1, node2]
                 }
             }
         }
