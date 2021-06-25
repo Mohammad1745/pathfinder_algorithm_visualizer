@@ -306,14 +306,6 @@ async function plotMaze () {
     }
 }
 
-function initiateActivationPoint(point, distance=0) {
-    let node = document
-        .querySelector('#graph_body')
-        .querySelector(`#node_row_${point[0]}`)
-        .querySelector(`#node_${point[0]}_${point[1]}`)
-    // node.innerHTML = distance+''
-}
-
 async function activatePoint(point, delay=0) {
     let node = document
         .querySelector('#graph_body')
