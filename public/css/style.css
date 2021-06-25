@@ -21,6 +21,22 @@
     border-top: var(--primary) 1px solid;
     border-bottom: var(--primary) 1px solid;
 }
+.algorithm-info {
+    display: none;
+    position: absolute;
+    top: 125px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 100;
+}
+.algorithm-info-header {
+    font-weight: bold;
+    font-size: 20px;
+}
+.algorithm-info-cancel-btn {
+    position: relative;
+    float: right;
+}
 .node-row {
     justify-content: center;
 }

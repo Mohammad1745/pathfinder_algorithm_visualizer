@@ -16,12 +16,12 @@ let modes = {
 }
 let mode = modes.initial
 let algorithms = {
-    dijkstra: {key: 1, name: "Dijkstra's"},
-    aStar: {key:2, name: "A* Search"},
-    greedyBestFirstSearch: {key:3, name: "Greedy Best First Search"},
-    swarm: {key:4, name: "Swarm"},
-    convergentSwarm: {key:5, name: "Convergent Swarm"},
-    biDirectionalSwarm: {key:6, name: "Bi-Directional Swarm"},
+    dijkstra: {key: 1, name: "Dijkstra's", description: `The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all.`},
+    aStar: {key:2, name: "A* Search", description: `Arguably the best pathfinding algorithm. It uses heuristics to guarantee the shortest path much faster than Dijkstra's Algorithm. The algorithm takes into account of the distance from end node . So, it searches the direction of the end node more than that of others.`},
+    greedyBestFirstSearch: {key:3, name: "Greedy Best First Search", description: `A faster, more heuristic-heavy version of A*. It does not guarantee the shortest path. The algorithm takes into account of the distance from end node and searches the direction of the end node first then the other directions.`},
+    swarm: {key:4, name: "Swarm", description: `A mixture of Dijkstra's Algorithm and A*. It does not guarantee the shortest path. The algorithm takes into account of the distance from end node and searches the direction of the end node more than that of others.`},
+    convergentSwarm: {key:5, name: "Convergent Swarm", description: `The faster, more heuristic-heavy version of Swarm. It does not guarantee the shortest path. The algorithm searches the direction of the end node heavily than that of others.`},
+    biDirectionalSwarm: {key:6, name: "Bi-Directional Swarm", description: `Swarm from both sides. It does not guarantee the shortest path`},
 }
 let algorithm = algorithms.dijkstra
 let mazes = {
@@ -64,6 +64,7 @@ function handleUserEvent () {
     visualizerButtonHandler()
     clearButtonHandler()
     menuHandler()
+    algorithmInfoHandler()
 }
 
 function algorithmInputHandler() {
@@ -203,6 +204,23 @@ function menuHandler() {
         if (mode===modes.initial && menuSelected===menus.wall){
             plotWall(event)
         }
+    })
+}
+
+function algorithmInfoHandler() {
+    let algorithmInfoButton = document.querySelector('#graph_header').querySelector('.algorithm-info-btn')
+    algorithmInfoButton.addEventListener('click', event => {
+        let algorithmInfo = document.querySelector('#algorithm_info')
+        let algorithmInfoHeader = document.querySelector('#algorithm_info_header')
+        let algorithmInfoBody = document.querySelector('#algorithm_info_body')
+        algorithmInfoHeader.innerHTML = algorithm.name+" Algorithm"
+        algorithmInfoBody.innerHTML = algorithm.description
+        algorithmInfo.style.display = "flex"
+    })
+    let algorithmInfoCancelButton = document.querySelector('#algorithm_info_cancel_btn')
+    algorithmInfoCancelButton.addEventListener('click', event => {
+        let algorithmInfo = document.querySelector('#algorithm_info')
+        algorithmInfo.style.display = "none"
     })
 }
 
