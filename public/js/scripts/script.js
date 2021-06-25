@@ -20,6 +20,7 @@ let algorithms = {
     aStar: {key:2, name: "A* Search"},
     greedyBestFirstSearch: {key:3, name: "Greedy Best First Search"},
     swarm: {key:4, name: "Swarm"},
+    convergentSwarm: {key:5, name: "Convergent Swarm"},
 }
 let algorithm = algorithms.dijkstra
 
@@ -52,6 +53,7 @@ function algorithmInputHandler() {
     let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
     let greedyBestFirstSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.greedyBestFirstSearch.key}`)
     let swarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.swarm.key}`)
+    let convergentSwarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.convergentSwarm.key}`)
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
@@ -66,6 +68,10 @@ function algorithmInputHandler() {
     })
     swarm.addEventListener('click', () => {
         algorithm = algorithms.swarm
+        updateVisualizerButton()
+    })
+    convergentSwarm.addEventListener('click', () => {
+        algorithm = algorithms.convergentSwarm
         updateVisualizerButton()
     })
 }
@@ -93,6 +99,9 @@ function visualizerButtonHandler () {
         }
         else if (algorithm.key===algorithms.swarm.key) {
             shortestPath = await swarm.search({row, column, wall,startingPoint, endPoint})
+        }
+        else if (algorithm.key===algorithms.convergentSwarm.key) {
+            shortestPath = await convergentSwarm.search({row, column, wall,startingPoint, endPoint})
         }
         await visualizeShortestPath(shortestPath)
         mode = modes.done
