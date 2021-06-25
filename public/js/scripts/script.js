@@ -2,6 +2,9 @@ let row = 25
 let column = 60
 let startingPoint = [Math.round(row/2-1), Math.round(row/2-1)]
 let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
+let mazeTime = 40
+let pathTime = 50
+let searchTime = 10
 let wall = []
 let menus = {
     start: 1,
@@ -24,9 +27,16 @@ let algorithms = {
     biDirectionalSwarm: {key:6, name: "Bi-Directional Swarm"},
 }
 let algorithm = algorithms.dijkstra
+let mazes = {
+    verticalSkew: {key: 1, name: "Vertical Skew Maze"},
+    horizontalSkew: {key: 2, name: "Horizontal Skew Maze"},
+    simpleStair: {key: 3, name: "Simple Stair Pattern"},
+    none: {key: 4, name: "None"},
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     showAlgorithmList()
+    showMazeList()
     updateVisualizerButton()
     plotGraph()
     indicateStartingPoint()
@@ -39,11 +49,17 @@ function showAlgorithmList() {
     Object.keys(algorithms).map(index => {
         algorithmList.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="algorithm_${algorithms[index].key}">${algorithms[index].name}</a>`)
     })
-
+}
+function showMazeList() {
+    let mazeList = document.querySelector('#maze_list')
+    Object.keys(mazes).map(index => {
+        mazeList.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="maze_${mazes[index].key}">${mazes[index].name}</a>`)
+    })
 }
 
 function handleUserEvent () {
     algorithmInputHandler()
+    mazeInputHandler()
     visualizerButtonHandler()
     clearButtonHandler()
     menuHandler()
@@ -79,6 +95,19 @@ function algorithmInputHandler() {
     biDirectionalSwarm.addEventListener('click', () => {
         algorithm = algorithms.biDirectionalSwarm
         updateVisualizerButton()
+    })
+}
+
+function mazeInputHandler() {
+    let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
+    none.addEventListener('click', async () => {
+        wall = []
+        await plotMaze()
+    })
+    let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
+    simpleStairButton.addEventListener('click', async () => {
+        wall = simpleStair.generate({row, column, startingPoint, endPoint})
+        await plotMaze()
     })
 }
 
@@ -242,6 +271,22 @@ function clearWall (point) {
     return isBrick
 }
 
+async function plotMaze () {
+    clearGraph(true)
+    indicateStartingPoint()
+    indicateEndPoint()
+    for(let point of wall) {
+        let node = document
+            .querySelector('#graph_body')
+            .querySelector(`#node_row_${point[0]}`)
+            .querySelector(`#node_${point[0]}_${point[1]}`)
+        node.classList.add('node-initiate-wall')
+        await sleep(mazeTime)
+        node.classList.remove('node-initiate-wall')
+        node.classList.add('node-wall')
+    }
+}
+
 function initiateActivationPoint(point, distance=0) {
     let node = document
         .querySelector('#graph_body')
@@ -316,7 +361,7 @@ async function visualizeShortestPath(shortestPath) {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-initiate-path')
-        await sleep(PATH_TIME)
+        await sleep(pathTime)
         node.classList.remove('node-initiate-path')
         node.classList.add('node-path')
     }

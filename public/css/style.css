@@ -5,6 +5,7 @@
     --active: #00539CFF;
     --initate-path: #d77;
     --path: #4a4;
+    --initiate-wall: #444;
     --wall: #000;
 }
 /*body {*/
@@ -49,6 +50,9 @@
 }
 .node-path {
     background-color: var(--path);
+}
+.node-initiate-wall {
+    background-color: var(--initiate-wall);
 }
 .node-wall {
     background-color: var(--wall);

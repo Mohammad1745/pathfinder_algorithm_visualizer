@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <script src="public/js/scripts/helper.js" defer></script>
+    <script src="public/js/mazes/simpleStair.js" defer></script>
     <script src="public/js/algorithms/dijkstra.js" defer></script>
     <script src="public/js/algorithms/aStar.js" defer></script>
     <script src="public/js/algorithms/greedyBestFirstSearch.js" defer></script>
@@ -33,7 +34,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownA" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select Algorithm
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="algorithm_list">
@@ -54,6 +55,14 @@
                 </li>
                 <li class="nav-item">
                     <button class="nav-link ml-2 btn btn-danger text-white" id="clear_btn">Clear</button>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle ml-2" href="#" id="navbarDropdownB" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Maze & Patterns
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="maze_list">
+                        <!-- Mazes & Patterns List -->
+                    </div>
                 </li>
             </ul>
         </div>

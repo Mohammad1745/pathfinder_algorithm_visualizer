@@ -1,5 +1,3 @@
-const PATH_TIME = 50
-const SEARCH_TIME = 10
 const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 function distance( a, b) {
@@ -12,6 +10,16 @@ Array.prototype.equals = function(arr2) {
         this.length === arr2.length &&
         this.every((value, index) => value === arr2[index])
     )
+}
+
+const randomNumber = (min, max, except=null) => {
+    let number = min+Math.random()*max
+    if (except) {
+        while (number===except){
+            number = min+Math.random()*max
+        }
+    }
+    return number;
 }
 
 const sleep = (milliseconds) => {
