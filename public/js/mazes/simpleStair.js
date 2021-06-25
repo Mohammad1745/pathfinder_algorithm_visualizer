@@ -3,9 +3,9 @@ let simpleStair = {
         let maze = []
         let r = row-3
         let iterator = -1
-        for (let c = 5; c<column-2; c++) {
+        for (let c =7; c<column-2; c++) {
             maze.unshift([r,c])
-            if (r<=1) iterator = +1
+            if (r<3) iterator = +1
             else if (r>=row-3) iterator = -1
             r += iterator
         }

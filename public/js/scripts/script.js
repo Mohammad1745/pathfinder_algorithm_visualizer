@@ -2,9 +2,6 @@ let row = 25
 let column = 60
 let startingPoint = [Math.round(row/2-1), Math.round(row/2-1)]
 let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
-let mazeTime = 40
-let pathTime = 50
-let searchTime = 10
 let wall = []
 let menus = {
     start: 1,
@@ -28,11 +25,15 @@ let algorithms = {
 }
 let algorithm = algorithms.dijkstra
 let mazes = {
-    verticalSkew: {key: 1, name: "Vertical Skew Maze"},
-    horizontalSkew: {key: 2, name: "Horizontal Skew Maze"},
+    // verticalSkew: {key: 1, name: "Vertical Skew Maze"},
+    // horizontalSkew: {key: 2, name: "Horizontal Skew Maze"},
     simpleStair: {key: 3, name: "Simple Stair Pattern"},
     none: {key: 4, name: "None"},
 }
+const MAZE_TIME = 50
+const PATH_TIME = 50
+const SEARCH_TIME = 10
+const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 document.addEventListener('DOMContentLoaded', () => {
     showAlgorithmList()
@@ -281,7 +282,7 @@ async function plotMaze () {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-initiate-wall')
-        await sleep(mazeTime)
+        await sleep(MAZE_TIME)
         node.classList.remove('node-initiate-wall')
         node.classList.add('node-wall')
     }
@@ -361,7 +362,7 @@ async function visualizeShortestPath(shortestPath) {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-initiate-path')
-        await sleep(pathTime)
+        await sleep(PATH_TIME)
         node.classList.remove('node-initiate-path')
         node.classList.add('node-path')
     }
