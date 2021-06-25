@@ -3,7 +3,8 @@ const SEARCH_TIME = 10
 const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 function distance( a, b) {
-    return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+    // return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+    return Math.abs((a[0]-b[0])) + Math.abs((a[1]-b[1]))
 }
 
 Array.prototype.equals = function(arr2) {

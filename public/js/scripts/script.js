@@ -1,5 +1,5 @@
-let row = 20
-let column = 50
+let row = 25
+let column = 60
 let startingPoint = [Math.round(row/2), Math.round(row/2)]
 let endPoint = [Math.round(row/2), column-Math.round(row/2)]
 let wall = []
@@ -16,9 +16,10 @@ let modes = {
 }
 let mode = modes.initial
 let algorithms = {
-    dijkstra: {key: 1, name: "Dijkstra's Algorithm"},
+    dijkstra: {key: 1, name: "Dijkstra's"},
     aStar: {key:2, name: "A* Search"},
     greedyBestFirstSearch: {key:3, name: "Greedy Best First Search"},
+    swarm: {key:4, name: "Swarm"},
 }
 let algorithm = algorithms.dijkstra
 
@@ -50,6 +51,7 @@ function algorithmInputHandler() {
     let dijkstraAlgorithm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.dijkstra.key}`)
     let aStarSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.aStar.key}`)
     let greedyBestFirstSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.greedyBestFirstSearch.key}`)
+    let swarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.swarm.key}`)
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
@@ -60,6 +62,10 @@ function algorithmInputHandler() {
     })
     greedyBestFirstSearch.addEventListener('click', () => {
         algorithm = algorithms.greedyBestFirstSearch
+        updateVisualizerButton()
+    })
+    swarm.addEventListener('click', () => {
+        algorithm = algorithms.swarm
         updateVisualizerButton()
     })
 }
@@ -85,16 +91,19 @@ function visualizerButtonHandler () {
         else if (algorithm.key===algorithms.greedyBestFirstSearch.key) {
             shortestPath = await greedyBestFirst.search({row, column, wall,startingPoint, endPoint})
         }
+        else if (algorithm.key===algorithms.swarm.key) {
+            shortestPath = await swarm.search({row, column, wall,startingPoint, endPoint})
+        }
         await visualizeShortestPath(shortestPath)
         mode = modes.done
-        statusMessage.innerHTML = `Shortest Distance: ${shortestPath.length-1}`
+        statusMessage.innerHTML = shortestPath.length>0 ? `Shortest Distance: ${shortestPath.length-1}` : `No Path Available`
     })
 }
 
 function clearButtonHandler () {
     let clearButton = document.querySelector('#clear_btn')
     clearButton.addEventListener('click', async event => {
-        if (mode===modes.done){
+        if (mode===modes.initial||mode===modes.done){
             clearGraph(true)
             indicateStartingPoint()
             indicateEndPoint()
@@ -153,7 +162,7 @@ function updateVisualizerButton() {
     let visualizerButton = document.querySelector('#visualize_btn')
     visualizerButton.innerHTML = `Visualize ${algorithm.name}`
     let algorithmMessage = document.querySelector('#algorithm_message')
-    algorithmMessage.innerHTML = algorithm.name
+    algorithmMessage.innerHTML = `${algorithm.name} Algorithm`
     let statusMessage = document.querySelector('#status_message')
     statusMessage.innerHTML = ``
 }
