@@ -1,7 +1,7 @@
 let row = 25
 let column = 60
-let startingPoint = [Math.round(row/2), Math.round(row/2)]
-let endPoint = [Math.round(row/2), column-Math.round(row/2)]
+let startingPoint = [Math.round(row/2-1), Math.round(row/2-1)]
+let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
 let wall = []
 let menus = {
     start: 1,
@@ -21,6 +21,7 @@ let algorithms = {
     greedyBestFirstSearch: {key:3, name: "Greedy Best First Search"},
     swarm: {key:4, name: "Swarm"},
     convergentSwarm: {key:5, name: "Convergent Swarm"},
+    biDirectionalSwarm: {key:6, name: "Bi-Directional Swarm"},
 }
 let algorithm = algorithms.dijkstra
 
@@ -54,6 +55,7 @@ function algorithmInputHandler() {
     let greedyBestFirstSearch = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.greedyBestFirstSearch.key}`)
     let swarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.swarm.key}`)
     let convergentSwarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.convergentSwarm.key}`)
+    let biDirectionalSwarm = document.querySelector('#algorithm_list').querySelector(`#algorithm_${algorithms.biDirectionalSwarm.key}`)
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
@@ -72,6 +74,10 @@ function algorithmInputHandler() {
     })
     convergentSwarm.addEventListener('click', () => {
         algorithm = algorithms.convergentSwarm
+        updateVisualizerButton()
+    })
+    biDirectionalSwarm.addEventListener('click', () => {
+        algorithm = algorithms.biDirectionalSwarm
         updateVisualizerButton()
     })
 }
@@ -102,6 +108,9 @@ function visualizerButtonHandler () {
         }
         else if (algorithm.key===algorithms.convergentSwarm.key) {
             shortestPath = await convergentSwarm.search({row, column, wall,startingPoint, endPoint})
+        }
+        else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
+            shortestPath = await biDirectionalSwarm.search({row, column, wall,startingPoint, endPoint})
         }
         await visualizeShortestPath(shortestPath)
         mode = modes.done
