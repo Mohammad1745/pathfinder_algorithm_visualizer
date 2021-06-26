@@ -127,7 +127,7 @@ function visualizerButtonHandler () {
             indicateEndPoint()
         }
         mode = modes.searching
-        statusMessage.innerHTML = `Searching`
+        statusMessage.insertAdjacentHTML('beforeend', `Searching <i class="fas fa-spinner"></i>`)
         let shortestPath = []
         if (algorithm.key===algorithms.dijkstra.key) {
             shortestPath = await dijkstra.search({row, column, wall,startingPoint, endPoint})
