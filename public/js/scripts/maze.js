@@ -46,6 +46,44 @@ let pattern = {
         return maze;
     },
 
+    ascendingWall: ({row, column, startingPoint, endPoint}) => {
+        let maze = []
+        let r = row-5
+        let off = Math.floor(Math.random()*(row-1))+1
+        for (let c=0; c<column-1; c++) {
+            if (!(r===off || startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
+                maze.unshift([r, c])
+            }
+            r--
+            if (r<0) {
+                r = row - 1
+                c -= 10
+                off = Math.floor(Math.random()*(row-1))+1
+            }
+        }
+        maze.reverse()
+        return maze;
+    },
+
+    descendingWall: ({row, column, startingPoint, endPoint}) => {
+        let maze = []
+        let r = 5
+        let off = Math.floor(Math.random()*(row-1))+1
+        for (let c=0; c<column; c++) {
+            if (!(r===off || startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
+                maze.unshift([r, c])
+            }
+            r++
+            if (r>=row) {
+                r = 0
+                c -= 10
+                off = Math.floor(Math.random()*(row-1))+1
+            }
+        }
+        maze.reverse()
+        return maze;
+    },
+
     recursiveMaze: ({row, column, startingPoint, endPoint}) => {
         let maze = []
         let r=0

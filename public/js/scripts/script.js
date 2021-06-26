@@ -20,9 +20,9 @@ let speeds = {
 }
 let mazes = {
     recursiveMaze: {key: 1, name: "Recursive Division Maze"},
-    // verticalSkew: {key: 2, name: "Vertical Skew Maze"},
-    // horizontalSkew: {key: 3, name: "Horizontal Skew Maze"},
-    horizontalWall: {key: 4, name: "Horizontal Wall"},
+    ascendingWall: {key: 3, name: "Ascending Wall"},
+    descendingWall: {key: 4, name: "Descending Wall"},
+    horizontalWall: {key: 2, name: "Horizontal Wall"},
     verticalWall: {key: 5, name: "Vertical Wall"},
     simpleStair: {key: 6, name: "Simple Stair Pattern"},
     none: {key: 7, name: "None"},
@@ -118,6 +118,8 @@ function mazeInputHandler() {
     let recursiveMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveMaze.key}`)
     let verticalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.verticalWall.key}`)
     let horizontalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.horizontalWall.key}`)
+    let ascendingWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.ascendingWall.key}`)
+    let descendingWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.descendingWall.key}`)
     let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
     none.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -140,6 +142,18 @@ function mazeInputHandler() {
     horizontalWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = pattern.horizontalWall({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
+    })
+    ascendingWallButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.ascendingWall({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
+    })
+    descendingWallButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.descendingWall({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
