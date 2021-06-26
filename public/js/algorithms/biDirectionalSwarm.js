@@ -48,10 +48,10 @@ let biDirectionalSwarm = {
             let matchedSolvedNodeFromEnd = solvedNodesFromEnd.filter(node => node.position.equals(targetNodeFromEnd.position)).length > 0
             if (!matchedSolvedNodeFromStart) {
                 solvedNodesFromStart.push(targetNodeFromStart)
-                await activatePoint(targetNodeFromStart.position, SEARCH_TIME)
+                await activatePoint(targetNodeFromStart.position, Math.round(SEARCH_TIME/speed.speed))
             }if (!matchedSolvedNodeFromEnd) {
                 solvedNodesFromEnd.push(targetNodeFromEnd)
-                await activatePoint(targetNodeFromEnd.position, SEARCH_TIME)
+                await activatePoint(targetNodeFromEnd.position, Math.round(SEARCH_TIME/speed.speed))
             }
             let duplicateNodes = biDirectionalSwarm.duplicateNodes(solvedNodesFromStart, solvedNodesFromEnd)
             if (duplicateNodes) {

@@ -27,7 +27,7 @@ let convergentSwarm = {
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
             if (!matchedSolvedNode) {
                 solvedNodes.push(targetNode)
-                await activatePoint(targetNode.position, SEARCH_TIME)
+                await activatePoint(targetNode.position, Math.round(SEARCH_TIME/speed.speed))
             }
             if (targetNode.position.equals(endPoint)) {
                 return convergentSwarm.extractShortestPath(solvedNodes, targetNode)

@@ -3,18 +3,8 @@ let column = 60
 let startingPoint = [Math.round(row/2-1), Math.round(row/2-1)]
 let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
 let wall = []
-let menus = {
-    start: 1,
-    end: 2,
-    wall: 3
-}
-let menuSelected = menus.wall
-let modes = {
-    initial: 1,
-    searching: 2,
-    done:3
-}
-let mode = modes.initial
+let menus = {start: 1, end: 2, wall: 3}
+let modes = {initial: 1, searching: 2, done:3}
 let algorithms = {
     dijkstra: {key: 1, name: "Dijkstra's", description: `The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all.`},
     aStar: {key:2, name: "A* Search", description: `Arguably the best pathfinding algorithm. It uses heuristics to guarantee the shortest path much faster than Dijkstra's Algorithm. The algorithm takes into account of the distance from end node . So, it searches the direction of the end node more than that of others.`},
@@ -23,7 +13,11 @@ let algorithms = {
     convergentSwarm: {key:5, name: "Convergent Swarm", description: `The faster, more heuristic-heavy version of Swarm. It does not guarantee the shortest path. The algorithm searches the direction of the end node heavily than that of others.`},
     biDirectionalSwarm: {key:6, name: "Bi-Directional Swarm", description: `Swarm from both sides. It does not guarantee the shortest path`},
 }
-let algorithm = algorithms.dijkstra
+let speeds = {
+    slow: {key:1, name:'Slow', speed: 1},
+    average: {key:2, name:'Average', speed: 2},
+    fast: {key:3, name:'Fast', speed: 10},
+}
 let mazes = {
     // Recursive Division: {key: 1, name: "Vertical Skew Maze"},
     // verticalSkew: {key: 2, name: "Vertical Skew Maze"},
@@ -31,20 +25,36 @@ let mazes = {
     simpleStair: {key: 4, name: "Simple Stair Pattern"},
     none: {key: 5, name: "None"},
 }
+let menuSelected = menus.wall
+let mode = modes.initial
+let algorithm = algorithms.dijkstra
+let speed = speeds.average
+
 const MAZE_TIME = 50
 const PATH_TIME = 50
-const SEARCH_TIME = 10
+const SEARCH_TIME = 20
 const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 document.addEventListener('DOMContentLoaded', () => {
     showAlgorithmList()
     showMazeList()
+    showSpeedList()
     updateVisualizerButton()
     plotGraph()
     indicateStartingPoint()
     indicateEndPoint()
     handleUserEvent()
 })
+
+function handleUserEvent () {
+    algorithmInputHandler()
+    mazeInputHandler()
+    speedInputHandler()
+    visualizerButtonHandler()
+    clearButtonHandler()
+    menuHandler()
+    algorithmInfoHandler()
+}
 
 function showAlgorithmList() {
     let algorithmList = document.querySelector('#algorithm_list')
@@ -58,14 +68,14 @@ function showMazeList() {
         mazeList.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="maze_${mazes[index].key}">${mazes[index].name}</a>`)
     })
 }
-
-function handleUserEvent () {
-    algorithmInputHandler()
-    mazeInputHandler()
-    visualizerButtonHandler()
-    clearButtonHandler()
-    menuHandler()
-    algorithmInfoHandler()
+function showSpeedList() {
+    let speedList = document.querySelector('#speed_list')
+    let selectSpeedButton = document.querySelector('#select_speed_btn')
+    speedList.innerHTML = ''
+    selectSpeedButton.innerHTML = `Speed: ${speed.name}`
+    Object.keys(speeds).map(index => {
+        speedList.insertAdjacentHTML('beforeend', `<a class="dropdown-item cursor-pointer" id="speed_${speeds[index].key}">${speeds[index].name}</a>`)
+    })
 }
 
 function algorithmInputHandler() {
@@ -117,6 +127,24 @@ function mazeInputHandler() {
         }
     })
 }
+function speedInputHandler() {
+    let slowButton = document.querySelector('#speed_list').querySelector(`#speed_${speeds.slow.key}`)
+    let selectSpeedButton = document.querySelector('#select_speed_btn')
+    slowButton.addEventListener('click', async () => {
+        speed = speeds.slow
+        selectSpeedButton.innerHTML = `Speed: ${speed.name}`
+    })
+    let averageButton = document.querySelector('#speed_list').querySelector(`#speed_${speeds.average.key}`)
+    averageButton.addEventListener('click', async () => {
+        speed = speeds.average
+        selectSpeedButton.innerHTML = `Speed: ${speed.name}`
+    })
+    let fastButton = document.querySelector('#speed_list').querySelector(`#speed_${speeds.fast.key}`)
+    fastButton.addEventListener('click', async () => {
+        speed = speeds.fast
+        selectSpeedButton.innerHTML = `Speed: ${speed.name}`
+    })
+}
 
 function visualizerButtonHandler () {
     let visualizerButton = document.querySelector('#visualize_btn')
@@ -128,6 +156,7 @@ function visualizerButtonHandler () {
             indicateEndPoint()
         }
         mode = modes.searching
+        statusMessage.innerHTML = ''
         statusMessage.insertAdjacentHTML('beforeend', `Searching <i class="fas fa-spinner"></i>`)
         let shortestPath = []
         if (algorithm.key===algorithms.dijkstra.key) {
@@ -307,7 +336,7 @@ async function plotMaze () {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         // node.classList.add('node-initiate-wall')
-        await sleep(MAZE_TIME)
+        await sleep(Math.round(MAZE_TIME/speed.speed))
         // node.classList.remove('node-initiate-wall')
         node.classList.add('node-wall')
     }
@@ -379,7 +408,7 @@ async function visualizeShortestPath(shortestPath) {
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
         node.classList.add('node-initiate-path')
-        await sleep(PATH_TIME)
+        await sleep(Math.round(PATH_TIME/speed.speed))
         node.classList.remove('node-initiate-path')
         node.classList.add('node-path')
     }
