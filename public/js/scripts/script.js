@@ -22,8 +22,10 @@ let mazes = {
     // Recursive Division: {key: 1, name: "Vertical Skew Maze"},
     // verticalSkew: {key: 2, name: "Vertical Skew Maze"},
     // horizontalSkew: {key: 3, name: "Horizontal Skew Maze"},
-    simpleStair: {key: 4, name: "Simple Stair Pattern"},
-    none: {key: 5, name: "None"},
+    horizontalWall: {key: 4, name: "Horizontal Wall"},
+    verticalWall: {key: 5, name: "Vertical Wall"},
+    simpleStair: {key: 6, name: "Simple Stair Pattern"},
+    none: {key: 7, name: "None"},
 }
 let menuSelected = menus.wall
 let mode = modes.initial
@@ -116,6 +118,20 @@ function mazeInputHandler() {
     none.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            await plotMaze()
+        }
+    })
+    let verticalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.verticalWall.key}`)
+    verticalWallButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.verticalWall({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
+    })
+    let horizontalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.horizontalWall.key}`)
+    horizontalWallButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.horizontalWall({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })

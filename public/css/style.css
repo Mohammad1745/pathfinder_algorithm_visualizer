@@ -65,7 +65,7 @@ App
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5%;
+    border-radius: 4%;
     background-color: var(--secondary);
     border: var(--primary) solid 1px;
 }
@@ -91,6 +91,7 @@ App
     background-color: var(--initiate-wall);
 }
 .node-wall {
+    border-color: var(--wall);
     background-color: var(--wall);
     animation: wall .2s linear normal;
 }
