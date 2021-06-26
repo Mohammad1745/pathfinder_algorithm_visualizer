@@ -25,10 +25,11 @@ let algorithms = {
 }
 let algorithm = algorithms.dijkstra
 let mazes = {
-    // verticalSkew: {key: 1, name: "Vertical Skew Maze"},
-    // horizontalSkew: {key: 2, name: "Horizontal Skew Maze"},
-    simpleStair: {key: 3, name: "Simple Stair Pattern"},
-    none: {key: 4, name: "None"},
+    // Recursive Division: {key: 1, name: "Vertical Skew Maze"},
+    // verticalSkew: {key: 2, name: "Vertical Skew Maze"},
+    // horizontalSkew: {key: 3, name: "Horizontal Skew Maze"},
+    simpleStair: {key: 4, name: "Simple Stair Pattern"},
+    none: {key: 5, name: "None"},
 }
 const MAZE_TIME = 50
 const PATH_TIME = 50
@@ -147,9 +148,9 @@ function visualizerButtonHandler () {
         else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
             shortestPath = await biDirectionalSwarm.search({row, column, wall,startingPoint, endPoint})
         }
+        statusMessage.innerHTML = shortestPath.length>0 ? `Shortest Distance: ${shortestPath.length-1}` : `No Path Available`
         await visualizeShortestPath(shortestPath)
         mode = modes.done
-        statusMessage.innerHTML = shortestPath.length>0 ? `Shortest Distance: ${shortestPath.length-1}` : `No Path Available`
     })
 }
 
@@ -157,6 +158,8 @@ function clearButtonHandler () {
     let clearButton = document.querySelector('#clear_btn')
     clearButton.addEventListener('click', async event => {
         if (mode===modes.initial||mode===modes.done){
+            let statusMessage = document.querySelector('#status_message')
+            statusMessage.innerHTML = ''
             clearGraph(true)
             indicateStartingPoint()
             indicateEndPoint()
@@ -303,9 +306,9 @@ async function plotMaze () {
             .querySelector('#graph_body')
             .querySelector(`#node_row_${point[0]}`)
             .querySelector(`#node_${point[0]}_${point[1]}`)
-        node.classList.add('node-initiate-wall')
+        // node.classList.add('node-initiate-wall')
         await sleep(MAZE_TIME)
-        node.classList.remove('node-initiate-wall')
+        // node.classList.remove('node-initiate-wall')
         node.classList.add('node-wall')
     }
 }
