@@ -19,7 +19,7 @@ let speeds = {
     fast: {key:3, name:'Fast', speed: 10},
 }
 let mazes = {
-    // Recursive Division: {key: 1, name: "Vertical Skew Maze"},
+    recursiveMaze: {key: 1, name: "Recursive Division Maze"},
     // verticalSkew: {key: 2, name: "Vertical Skew Maze"},
     // horizontalSkew: {key: 3, name: "Horizontal Skew Maze"},
     horizontalWall: {key: 4, name: "Horizontal Wall"},
@@ -32,7 +32,7 @@ let mode = modes.initial
 let algorithm = algorithms.dijkstra
 let speed = speeds.average
 
-const MAZE_TIME = 50
+const MAZE_TIME = 20
 const PATH_TIME = 50
 const SEARCH_TIME = 20
 const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
@@ -115,27 +115,34 @@ function algorithmInputHandler() {
 
 function mazeInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
+    let recursiveMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveMaze.key}`)
+    let verticalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.verticalWall.key}`)
+    let horizontalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.horizontalWall.key}`)
+    let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
     none.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
             await plotMaze()
         }
     })
-    let verticalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.verticalWall.key}`)
+    recursiveMazeButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
+    })
     verticalWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = pattern.verticalWall({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
-    let horizontalWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.horizontalWall.key}`)
     horizontalWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = pattern.horizontalWall({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
-    let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
     simpleStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = pattern.simpleStair({row, column, startingPoint, endPoint})
