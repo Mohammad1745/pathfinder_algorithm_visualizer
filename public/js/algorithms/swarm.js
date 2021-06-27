@@ -2,11 +2,11 @@ let swarm = {
     search: async ({row, column, weights, wall, startingPoint, endPoint}) => {
         let solvedNodes = []
         let unsolvedNodes = []
-        let biasRatio = 2.25
+        let heuristic = 2.25
         solvedNodes.push({
             position: startingPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/biasRatio,
+            biasedDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         await activatePoint(startingPoint)
@@ -19,7 +19,7 @@ let swarm = {
                 [lastNode.position[0] + 1, lastNode.position[1]],
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
-            swarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio)
+            swarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristic)
             unsolvedNodes.sort((a, b) => a.biasedDistance - b.biasedDistance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
@@ -34,7 +34,7 @@ let swarm = {
         }
     },
 
-    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristic) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
@@ -52,7 +52,7 @@ let swarm = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
-                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/biasRatio,
+                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
                         prev: lastNode.position
                     })
                 }

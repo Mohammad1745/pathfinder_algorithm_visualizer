@@ -4,17 +4,17 @@ let biDirectionalSwarm = {
         let unsolvedNodesFromStart = []
         let solvedNodesFromEnd = []
         let unsolvedNodesFromEnd = []
-        let biasRatio = 2.25
+        let heuristic = 2.25
         solvedNodesFromStart.push({
             position: startingPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/biasRatio,
+            biasedDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         solvedNodesFromEnd.push({
             position: endPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/biasRatio,
+            biasedDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         await activatePoint(startingPoint)
@@ -35,8 +35,8 @@ let biDirectionalSwarm = {
                 [lastNodeFromEnd.position[0] - 1, lastNodeFromEnd.position[1]],
                 [lastNodeFromEnd.position[0] + 1, lastNodeFromEnd.position[1]],
             ]
-            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, biasRatio, endPoint)
-            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, biasRatio, startingPoint)
+            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, heuristic, endPoint)
+            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, heuristic, startingPoint)
             unsolvedNodesFromStart.sort((a, b) => a.biasedDistance - b.biasedDistance)
             unsolvedNodesFromEnd.sort((a, b) => a.biasedDistance - b.biasedDistance)
             if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return []
@@ -58,7 +58,7 @@ let biDirectionalSwarm = {
         }
     },
 
-    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio, endPoint) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristic, endPoint) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
@@ -76,7 +76,7 @@ let biDirectionalSwarm = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
-                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/biasRatio,
+                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
                         prev: lastNode.position
                     })
                 }
