@@ -7,8 +7,7 @@ let convergentSwarm = {
             position: startingPoint,
             startDistance: 0,
             biasedDistance: distance(startingPoint, endPoint)/biasRatio,
-            prev: null,
-            weight: 1
+            prev: null
         })
         await activatePoint(startingPoint)
 
@@ -54,8 +53,7 @@ let convergentSwarm = {
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
                         biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/biasRatio,
-                        prev: lastNode.position,
-                        weight: 1
+                        prev: lastNode.position
                     })
                 }
             }

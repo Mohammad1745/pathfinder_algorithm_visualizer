@@ -6,8 +6,7 @@ let greedyBestFirst = {
             position: startingPoint,
             distance: 0,
             endDistance: distance(startingPoint, endPoint),
-            prev: null,
-            weight: 1
+            prev: null
         })
         await activatePoint(startingPoint)
 
@@ -53,8 +52,7 @@ let greedyBestFirst = {
                         position: nextNodePosition,
                         distance: lastNode.distance+weight,
                         endDistance: distance(nextNodePosition, endPoint)+weight,
-                        prev: lastNode.position,
-                        weight: 1
+                        prev: lastNode.position
                     })
                 }
             }

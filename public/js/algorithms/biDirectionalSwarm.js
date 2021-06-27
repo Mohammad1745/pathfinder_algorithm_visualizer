@@ -9,15 +9,13 @@ let biDirectionalSwarm = {
             position: startingPoint,
             startDistance: 0,
             biasedDistance: distance(startingPoint, endPoint)/biasRatio,
-            prev: null,
-            weight: 1
+            prev: null
         })
         solvedNodesFromEnd.push({
             position: endPoint,
             startDistance: 0,
             biasedDistance: distance(startingPoint, endPoint)/biasRatio,
-            prev: null,
-            weight: 1
+            prev: null
         })
         await activatePoint(startingPoint)
         await activatePoint(endPoint)
@@ -79,8 +77,7 @@ let biDirectionalSwarm = {
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
                         biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/biasRatio,
-                        prev: lastNode.position,
-                        weight: 1
+                        prev: lastNode.position
                     })
                 }
             }
