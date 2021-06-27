@@ -31,11 +31,18 @@
 /*
 App
 */
+.navbar-brand{
+    font-weight: bold;
+    font-family: sans-serif;
+}
 .navbar-nav{
     font-size: 15px;
 }
 .navbar-nav button{
     font-size: 15px;
+}
+.navbar-nav .nav-item .nav-link{
+    color: rgba(255,255,255,.9);
 }
 .graph {
     border-top: var(--primary) 1px solid;
