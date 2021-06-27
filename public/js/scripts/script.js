@@ -299,7 +299,7 @@ function visualizerButtonHandler () {
         else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
             shortestPath = await biDirectionalSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
-        statusMessage.innerHTML = shortestPath.hasOwnProperty('weight') ? `Shortest Distance: ${shortestPath.weight}` : `No Path Available`
+        statusMessage.innerHTML = shortestPath.hasOwnProperty('weight') ? `Weighted Distance: ${shortestPath.weight}` : `No Path Available`
         await visualizeShortestPath(shortestPath.path)
         mode = modes.done
     })
