@@ -19,8 +19,8 @@ let speeds = {
     fast: {key:3, name:'Fast', speed: 10},
 }
 let mazes = {
-    recursiveMaze: {key: 1, name: "Recursive Division (Maze)"},
-    recursiveAntiMaze: {key: 2, name: "Recursive Division (Anti-Maze)"},
+    recursiveMaze: {key: 1, name: "Maze"},
+    recursiveAntiMaze: {key: 2, name: "Anti-Maze"},
     randomObstacle: {key: 3, name: "Random Obstacles"},
     straightLine: {key: 4, name: "Straight Lines"},
     simpleStair: {key: 6, name: "Simple Stair Pattern"},
