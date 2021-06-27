@@ -20,7 +20,7 @@ let swarm = {
                 [lastNode.position[0] + 1, lastNode.position[1]],
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
-            swarm.updateNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio)
+            swarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio)
             unsolvedNodes.sort((a, b) => a.biasedDistance - b.biasedDistance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
@@ -35,7 +35,7 @@ let swarm = {
         }
     },
 
-    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0

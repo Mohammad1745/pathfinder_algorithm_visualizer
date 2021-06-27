@@ -17,7 +17,7 @@ let dijkstra = {
                 [lastNode.position[0] + 1, lastNode.position[1]],
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
-            dijkstra.updateNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
+            dijkstra.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
             unsolvedNodes.sort((a, b) => a.distance - b.distance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
@@ -32,7 +32,7 @@ let dijkstra = {
         }
     },
 
-    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0

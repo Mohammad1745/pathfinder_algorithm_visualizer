@@ -37,8 +37,8 @@ let biDirectionalSwarm = {
                 [lastNodeFromEnd.position[0] - 1, lastNodeFromEnd.position[1]],
                 [lastNodeFromEnd.position[0] + 1, lastNodeFromEnd.position[1]],
             ]
-            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, biasRatio, endPoint)
-            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, biasRatio, startingPoint)
+            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, biasRatio, endPoint)
+            biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, biasRatio, startingPoint)
             unsolvedNodesFromStart.sort((a, b) => a.biasedDistance - b.biasedDistance)
             unsolvedNodesFromEnd.sort((a, b) => a.biasedDistance - b.biasedDistance)
             if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return []
@@ -60,7 +60,7 @@ let biDirectionalSwarm = {
         }
     },
 
-    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio, endPoint) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio, endPoint) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
