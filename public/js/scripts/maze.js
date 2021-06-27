@@ -23,6 +23,31 @@ let pattern = {
         else return pattern.descendingWall({row, column, startingPoint, endPoint})
     },
 
+    recursiveMaze: ({row, column, startingPoint, endPoint}) => {
+        let border = pattern.generateBorder({row, column})
+        let maze =  pattern.generateMaze(startingPoint, endPoint)
+        maze =  border.concat(maze)
+        for(let index in maze) {
+            if (startingPoint.equals(maze[index]) || endPoint.equals(maze[index])) {
+                maze.splice(index, 1)
+            }
+        }
+        return maze
+    },
+
+    recursiveAntiMaze: ({row, column, startingPoint, endPoint}) => {
+        let border = pattern.generateBorder({row, column})
+        let maze =  pattern.generateMaze(startingPoint, endPoint)
+        maze = border.concat(maze)
+        let antiMaze = pattern.generateAntiMaze({maze, row, column})
+        for(let index in antiMaze) {
+            if (startingPoint.equals(antiMaze[index]) || endPoint.equals(antiMaze[index])) {
+                antiMaze.splice(index, 1)
+            }
+        }
+        return antiMaze
+    },
+
     verticalWall: ({row, column, startingPoint, endPoint}) => {
         let maze = []
         for (let c=7; c<column; c+=7) {
@@ -92,41 +117,50 @@ let pattern = {
         return maze;
     },
 
-    recursiveMaze: ({row, column, startingPoint, endPoint}) => {
-        let maze = []
+    generateBorder: ({row, column}) => {
+        let border = []
         let r=0
         for (let c=0; c<column; c++) {
             if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                maze.unshift([r, c])
+                border.unshift([r, c])
             }
         }
         let c=column-1
         for (let r=0; r<row; r++) {
             if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                maze.unshift([r, c])
+                border.unshift([r, c])
             }
         }
         r=row-1
         for (let c=column-1; c>=0; c--) {
             if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                maze.unshift([r, c])
+                border.unshift([r, c])
             }
         }
         c=0
         for (let r=row-1; r>=0; r--) {
             if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                maze.unshift([r, c])
+                border.unshift([r, c])
             }
         }
-        maze.reverse()
-        maze = maze.concat(pattern.generateMaze(startingPoint, endPoint))
-        for(let index in maze) {
-            if (startingPoint.equals(maze[index]) || endPoint.equals(maze[index])) {
-                maze.splice(index, 1)
-            }
-        }
-        return maze
+        border.reverse()
+        return border
     },
+
+    generateAntiMaze: ({maze, row, column}) => {
+        let antiMaze = []
+        for (let r=0; r<row; r++) {
+            for (let c=0; c<column; c++) {
+                let matched = maze.filter(point => point.equals([r, c])).length
+                if (!matched) {
+                    antiMaze.unshift([r, c])
+                }
+            }
+        }
+        antiMaze.reverse()
+        return antiMaze
+    },
+
     generateMaze: () => {
         let maze = [
             [4,1],[10,1],[14,1],[20,1],

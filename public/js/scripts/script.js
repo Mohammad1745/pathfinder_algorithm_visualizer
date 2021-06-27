@@ -19,7 +19,8 @@ let speeds = {
     fast: {key:3, name:'Fast', speed: 10},
 }
 let mazes = {
-    recursiveMaze: {key: 1, name: "Recursive Division Maze"},
+    recursiveMaze: {key: 1, name: "Recursive Division (Maze)"},
+    recursiveAntiMaze: {key: 2, name: "Recursive Division (Anti-Maze)"},
     straightLine: {key: 3, name: "Straight Lines"},
     simpleStair: {key: 6, name: "Simple Stair Pattern"},
     none: {key: 7, name: "None"},
@@ -113,6 +114,7 @@ function algorithmInputHandler() {
 function mazeInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
     let recursiveMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveMaze.key}`)
+    let recursiveAntiMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveAntiMaze.key}`)
     let straightLineButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.straightLine.key}`)
     let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
     none.addEventListener('click', async () => {
@@ -124,6 +126,12 @@ function mazeInputHandler() {
     recursiveMazeButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
+            await plotMaze()
+        }
+    })
+    recursiveAntiMazeButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
