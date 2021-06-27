@@ -9,13 +9,15 @@ let biDirectionalSwarm = {
             position: startingPoint,
             startDistance: 0,
             heuristicDistance: distance(startingPoint, endPoint)/heuristic,
-            prev: null
+            prev: null,
+            weight: WEIGHT_DEFAULT_VALUE
         })
         solvedNodesFromEnd.push({
             position: endPoint,
             startDistance: 0,
             heuristicDistance: distance(startingPoint, endPoint)/heuristic,
-            prev: null
+            prev: null,
+            weight: WEIGHT_DEFAULT_VALUE
         })
         await activatePoint(startingPoint)
         await activatePoint(endPoint)
@@ -39,7 +41,7 @@ let biDirectionalSwarm = {
             biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, heuristic, startingPoint)
             unsolvedNodesFromStart.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
             unsolvedNodesFromEnd.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
-            if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return []
+            if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return {}
             let targetNodeFromStart = unsolvedNodesFromStart.shift()
             let targetNodeFromEnd = unsolvedNodesFromEnd.shift()
             let matchedSolvedNodeFromStart = solvedNodesFromStart.filter(node => node.position.equals(targetNodeFromStart.position)).length > 0
@@ -77,7 +79,8 @@ let biDirectionalSwarm = {
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
                         heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
-                        prev: lastNode.position
+                        prev: lastNode.position,
+                        weight
                     })
                 }
             }
@@ -85,22 +88,26 @@ let biDirectionalSwarm = {
     },
 
     extractShortestPath: (solvedNodesFromStart, solvedNodesFromEnd, duplicateNodes) => {
-        let shortestPath = []
+        let path = []
+        let weight = 0
         let lastNode = duplicateNodes[1]
         while (lastNode) {
-            shortestPath.unshift(lastNode.position)
+            weight += lastNode.weight
+            path.unshift(lastNode.position)
             if (!lastNode.prev) break
             lastNode = solvedNodesFromEnd.filter(node => node.position.equals(lastNode.prev))[0]
         }
-        shortestPath.pop()
-        shortestPath.reverse()
+        path.pop()
+        weight -= lastNode.weight
+        path.reverse()
         lastNode = duplicateNodes[0]
         while (lastNode) {
-            shortestPath.unshift(lastNode.position)
+            weight += lastNode.weight
+            path.unshift(lastNode.position)
             if (!lastNode.prev) break
             lastNode = solvedNodesFromStart.filter(node => node.position.equals(lastNode.prev))[0]
         }
-        return shortestPath
+        return {path, weight}
     },
 
     duplicateNodes : (nodeList1, nodeList2) => {

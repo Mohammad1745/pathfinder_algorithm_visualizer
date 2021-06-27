@@ -7,7 +7,8 @@ let convergentSwarm = {
             position: startingPoint,
             startDistance: 0,
             heuristicDistance: distance(startingPoint, endPoint)/heuristic,
-            prev: null
+            prev: null,
+            weight: WEIGHT_DEFAULT_VALUE
         })
         await activatePoint(startingPoint)
 
@@ -21,7 +22,7 @@ let convergentSwarm = {
             ]
             convergentSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristic)
             unsolvedNodes.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
-            if (!unsolvedNodes.length) return []
+            if (!unsolvedNodes.length) return {}
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
             if (!matchedSolvedNode) {
@@ -53,7 +54,8 @@ let convergentSwarm = {
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
                         heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
-                        prev: lastNode.position
+                        prev: lastNode.position,
+                        weight
                     })
                 }
             }
@@ -61,12 +63,14 @@ let convergentSwarm = {
     },
 
     extractShortestPath: (solvedNodes, lastNode) => {
-        let shortestPath = []
+        let path = []
+        let weight = 0
         while (lastNode) {
-            shortestPath.unshift(lastNode.position)
+            weight += lastNode.weight
+            path.unshift(lastNode.position)
             if (!lastNode.prev) break
             lastNode = solvedNodes.filter(node => node.position.equals(lastNode.prev))[0]
         }
-        return shortestPath
+        return {path, weight}
     }
 }

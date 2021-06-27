@@ -280,7 +280,7 @@ function visualizerButtonHandler () {
         mode = modes.searching
         statusMessage.innerHTML = ''
         statusMessage.insertAdjacentHTML('beforeend', `Searching <i class="fas fa-spinner"></i>`)
-        let shortestPath = []
+        let shortestPath = {}
         if (algorithm.key===algorithms.dijkstra.key) {
             shortestPath = await dijkstra.search({row, column, weights, wall,startingPoint, endPoint})
         }
@@ -299,8 +299,8 @@ function visualizerButtonHandler () {
         else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
             shortestPath = await biDirectionalSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
-        statusMessage.innerHTML = shortestPath.length>0 ? `Shortest Distance: ${shortestPath.length-1}` : `No Path Available`
-        await visualizeShortestPath(shortestPath)
+        statusMessage.innerHTML = shortestPath.hasOwnProperty('weight') ? `Shortest Distance: ${shortestPath.weight}` : `No Path Available`
+        await visualizeShortestPath(shortestPath.path)
         mode = modes.done
     })
 }

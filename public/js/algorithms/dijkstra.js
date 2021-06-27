@@ -5,7 +5,8 @@ let dijkstra = {
         solvedNodes.push({
             position: startingPoint,
             distance: 0,
-            prev: null
+            prev: null,
+            weight: WEIGHT_DEFAULT_VALUE,
         })
         await activatePoint(startingPoint)
 
@@ -19,7 +20,7 @@ let dijkstra = {
             ]
             dijkstra.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
             unsolvedNodes.sort((a, b) => a.distance - b.distance)
-            if (!unsolvedNodes.length) return []
+            if (!unsolvedNodes.length) return {}
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
             if (!matchedSolvedNode) {
@@ -50,7 +51,8 @@ let dijkstra = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         distance: lastNode.distance + weight,
-                        prev: lastNode.position
+                        prev: lastNode.position,
+                        weight
                     })
                 }
             }
@@ -58,12 +60,14 @@ let dijkstra = {
     },
 
     extractShortestPath: (solvedNodes, lastNode) => {
-        let shortestPath = []
+        let path = []
+        let weight = 0
         while (lastNode) {
-            shortestPath.unshift(lastNode.position)
+            weight += lastNode.weight
+            path.unshift(lastNode.position)
             if (!lastNode.prev) break
             lastNode = solvedNodes.filter(node => node.position.equals(lastNode.prev))[0]
         }
-        return shortestPath
+        return {path, weight}
     }
 }
