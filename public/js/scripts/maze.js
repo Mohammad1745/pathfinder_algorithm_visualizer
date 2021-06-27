@@ -41,9 +41,9 @@ let pattern = {
         let border = pattern.generateBorder({row, column})
         let maze =  pattern.generateMaze(startingPoint, endPoint)
         maze =  border.concat(maze)
-        for(let index in maze) {
-            if (startingPoint.equals(maze[index]) || endPoint.equals(maze[index])) {
-                maze.splice(index, 1)
+        for(let i=0; i<maze.length; i++) {
+            if (startingPoint.equals(maze[i]) || endPoint.equals(maze[i])) {
+                maze.splice(i, 1)
             }
         }
         return maze
