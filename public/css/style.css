@@ -71,9 +71,10 @@ App
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 4%;
+    /*border-radius: 4%;*/
     background-color: var(--secondary);
-    border: var(--primary) solid 1px;
+    border-top: var(--primary) solid 1px;
+    border-left: var(--primary) solid 1px;
 }
 .node-example {
     height: 20px;
@@ -83,6 +84,7 @@ App
     background-color: var(--initiate-activation);
 }
 .node-active {
+    border-color: var(--animate-activation);
     background-color: var(--active);
     animation: activation 1s linear normal;
 }
@@ -90,6 +92,7 @@ App
     background-color: var(--initate-path);
 }
 .node-path {
+    border-color: var(--path);
     background-color: var(--path);
     animation: path .8s linear normal;
 }

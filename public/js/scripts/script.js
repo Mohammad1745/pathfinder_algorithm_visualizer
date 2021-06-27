@@ -301,6 +301,7 @@ function plotGraph() {
             let node = nodeRow.querySelector(`#node_${i}_${j}`)
             node.style.width = nodeSize+"px"
             node.style.height = nodeSize+"px"
+            if (j===column-1) node.style.borderRight = "#aaa solid 1px"
         }
     }
 }
