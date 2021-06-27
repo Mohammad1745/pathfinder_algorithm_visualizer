@@ -3,7 +3,8 @@ let column = 60
 let startingPoint = [Math.round(row/2-1), Math.round(row/2-1)]
 let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
 let wall = []
-let menus = {start: 1, end: 2, wall: 3}
+let weights = []
+let menus = {start: 1, end: 2, wall: 3, weight: 4}
 let modes = {initial: 1, searching: 2, done:3}
 let algorithms = {
     dijkstra: {key: 1, name: "Dijkstra's", description: `The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all. <a href="https://youtu.be/GazC3A4OQTE" target="_blank">Learn more...</a>`},
@@ -31,6 +32,8 @@ let mode = modes.initial
 let algorithm = algorithms.dijkstra
 let speed = speeds.average
 
+const WEIGHT_VALUE = 5
+const WEIGHT_DEFAULT_VALUE = 1
 const MAZE_TIME = 20
 const PATH_TIME = 50
 const SEARCH_TIME = 20
@@ -204,22 +207,22 @@ function visualizerButtonHandler () {
         statusMessage.insertAdjacentHTML('beforeend', `Searching <i class="fas fa-spinner"></i>`)
         let shortestPath = []
         if (algorithm.key===algorithms.dijkstra.key) {
-            shortestPath = await dijkstra.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await dijkstra.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.aStar.key) {
-            shortestPath = await aStar.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await aStar.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.greedyBestFirstSearch.key) {
-            shortestPath = await greedyBestFirst.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await greedyBestFirst.search({row, weights, column, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.swarm.key) {
-            shortestPath = await swarm.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await swarm.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.convergentSwarm.key) {
-            shortestPath = await convergentSwarm.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await convergentSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
-            shortestPath = await biDirectionalSwarm.search({row, column, wall,startingPoint, endPoint})
+            shortestPath = await biDirectionalSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
         statusMessage.innerHTML = shortestPath.length>0 ? `Shortest Distance: ${shortestPath.length-1}` : `No Path Available`
         await visualizeShortestPath(shortestPath)
@@ -255,6 +258,10 @@ function menuHandler() {
         if (mode===modes.initial) menuSelected = menus.wall
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
+    document.querySelector('#weight_btn').addEventListener('click', async event => {
+        if (mode===modes.initial) menuSelected = menus.weight
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
+    })
     let graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('mousedown', event => {
         if (mode===modes.initial && menuSelected===menus.start){
@@ -278,11 +285,17 @@ function menuHandler() {
         else if (mode===modes.initial && menuSelected===menus.wall){
             plotWall(event)
         }
+        else if (mode===modes.initial && menuSelected===menus.weight){
+            plotWeights(event)
+        }
     })
     graphBody = document.querySelector('#graph_body')
     graphBody.addEventListener('dragenter', event => {
         if (mode===modes.initial && menuSelected===menus.wall){
             plotWall(event)
+        }
+        else if (mode===modes.initial && menuSelected===menus.weight){
+            plotWeights(event)
         }
     })
 }
@@ -371,6 +384,32 @@ function clearWall (point) {
     return isBrick
 }
 
+function plotWeights (event) {
+    let point = [
+        Number(event.target.getAttribute('data-row')),
+        Number(event.target.getAttribute('data-column'))
+    ]
+    if (!(point.equals(startingPoint)||point.equals(endPoint))){
+        let inWeights = clearWeights(point)
+        if (!inWeights) {
+            weights.unshift(point)
+            indicateWeight(point)
+        }
+    }
+}
+
+function clearWeights (point) {
+    let isWeight = false
+    weights.map((brick, index) => {
+        if (point.equals(brick)){
+            weights.splice(index, 1)
+            clearWeight(point)
+            isWeight = true
+        }
+    })
+    return isWeight
+}
+
 async function plotMaze () {
     clearGraph(true)
     indicateStartingPoint()
@@ -444,6 +483,22 @@ function clearWallBrick(point) {
         .querySelector(`#node_row_${point[0]}`)
         .querySelector(`#node_${point[0]}_${point[1]}`)
     node.classList.remove('node-wall')
+}
+function indicateWeight(point) {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${point[0]}`)
+        .querySelector(`#node_${point[0]}_${point[1]}`)
+    node.innerHTML=""
+    node.insertAdjacentHTML('beforeend', `<i class="fas fa-weight-hanging"></i>`)
+}
+
+function clearWeight(point) {
+    let node = document
+        .querySelector('#graph_body')
+        .querySelector(`#node_row_${point[0]}`)
+        .querySelector(`#node_${point[0]}_${point[1]}`)
+    node.innerHTML=""
 }
 
 async function visualizeShortestPath(shortestPath) {

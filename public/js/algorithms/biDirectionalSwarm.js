@@ -1,5 +1,5 @@
 let biDirectionalSwarm = {
-    search: async ({row, column, wall, startingPoint, endPoint}) => {
+    search: async ({row, column, wall, weights, startingPoint, endPoint}) => {
         let solvedNodesFromStart = []
         let unsolvedNodesFromStart = []
         let solvedNodesFromEnd = []
@@ -37,8 +37,8 @@ let biDirectionalSwarm = {
                 [lastNodeFromEnd.position[0] - 1, lastNodeFromEnd.position[1]],
                 [lastNodeFromEnd.position[0] + 1, lastNodeFromEnd.position[1]],
             ]
-            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, biasRatio, endPoint)
-            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, biasRatio, startingPoint)
+            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, biasRatio, endPoint)
+            biDirectionalSwarm.updateNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, biasRatio, startingPoint)
             unsolvedNodesFromStart.sort((a, b) => a.biasedDistance - b.biasedDistance)
             unsolvedNodesFromEnd.sort((a, b) => a.biasedDistance - b.biasedDistance)
             if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return []
@@ -60,23 +60,25 @@ let biDirectionalSwarm = {
         }
     },
 
-    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, biasRatio, endPoint) => {
+    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, biasRatio, endPoint) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
+            let isWeight = weights.filter(weight => nextNodePosition.equals(weight)).length > 0
             let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length > 0
             if (!isSolvedNode && isNodeValid && !isWallBrick) {
                 let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
+                let weight = isWeight ? WEIGHT_VALUE : WEIGHT_DEFAULT_VALUE
                 if (matchedUnsolvedNode[0]) {
-                    if (lastNode.startDistance + 1 < matchedUnsolvedNode.startDistance) {
-                        matchedUnsolvedNode.startDistance = lastNode.startDistance + 1
+                    if (lastNode.startDistance + weight < matchedUnsolvedNode.startDistance) {
+                        matchedUnsolvedNode.startDistance = lastNode.startDistance + weight
                         matchedUnsolvedNode.prev = lastNode.position
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
-                        startDistance: lastNode.startDistance + 1,
-                        biasedDistance: (lastNode.startDistance + 1) + distance(nextNodePosition, endPoint)/biasRatio,
+                        startDistance: lastNode.startDistance + weight,
+                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/biasRatio,
                         prev: lastNode.position,
                         weight: 1
                     })

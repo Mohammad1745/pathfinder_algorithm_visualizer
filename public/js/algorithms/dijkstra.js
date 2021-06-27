@@ -1,12 +1,11 @@
 let dijkstra = {
-    search: async ({row, column, wall, startingPoint, endPoint}) => {
+    search: async ({row, column, weights, wall, startingPoint, endPoint}) => {
         let solvedNodes = []
         let unsolvedNodes = []
         solvedNodes.push({
             position: startingPoint,
             distance: 0,
-            prev: null,
-            weight: 1
+            prev: null
         })
         await activatePoint(startingPoint)
 
@@ -18,7 +17,7 @@ let dijkstra = {
                 [lastNode.position[0] + 1, lastNode.position[1]],
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
-            dijkstra.updateNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall)
+            dijkstra.updateNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
             unsolvedNodes.sort((a, b) => a.distance - b.distance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
@@ -33,24 +32,25 @@ let dijkstra = {
         }
     },
 
-    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall) => {
+    updateNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
+            let isWeight = weights.filter(weight => nextNodePosition.equals(weight)).length > 0
             let isSolvedNode = solvedNodes.filter(node => node.position.equals(nextNodePosition)).length > 0
             if (!isSolvedNode && isNodeValid && !isWallBrick) {
                 let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
+                let weight = isWeight ? WEIGHT_VALUE : WEIGHT_DEFAULT_VALUE
                 if (matchedUnsolvedNode[0]) {
-                    if (lastNode.distance + 1 < matchedUnsolvedNode.distance) {
-                        matchedUnsolvedNode.distance = lastNode.distance + 1
+                    if (lastNode.distance + weight < matchedUnsolvedNode.distance) {
+                        matchedUnsolvedNode.distance = lastNode.distance + weight
                         matchedUnsolvedNode.prev = lastNode.position
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
-                        distance: lastNode.distance + 1,
-                        prev: lastNode.position,
-                        weight: 1
+                        distance: lastNode.distance + weight,
+                        prev: lastNode.position
                     })
                 }
             }
