@@ -23,6 +23,20 @@ let pattern = {
         else return pattern.descendingWall({row, column, startingPoint, endPoint})
     },
 
+    randomObstacle: ({row, column, startingPoint, endPoint}) => {
+        let maze = []
+        let shuffler = Math.floor(Math.random() * 3 + 2)
+        for (let i=0; i<row*column/shuffler; i++) {
+            let r = Math.floor(Math.random() * (row-1))
+            let c = Math.floor(Math.random() * (column-1))
+            let matched = maze.filter(point => point.equals([r, c])).length
+            if (!(matched || startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
+                maze.unshift([r, c])
+            }
+        }
+        return maze
+    },
+
     recursiveMaze: ({row, column, startingPoint, endPoint}) => {
         let border = pattern.generateBorder({row, column})
         let maze =  pattern.generateMaze(startingPoint, endPoint)
@@ -162,7 +176,7 @@ let pattern = {
     },
 
     generateMaze: () => {
-        let maze = [
+        return [
             [4,1],[10,1],[14,1],[20,1],
             [2,2],[3,2],[4,2],[6,2],[7,2],[8,2],[10,2],[11,2],[12,2],[14,2],[15,2],[16,2],[18,2],[20,2],[22,2],[23,2],[24,2],
             [4,3],[8,3],[10,3],[14,3],[18,3],[20,3],
@@ -223,6 +237,5 @@ let pattern = {
             [2,58],[3,58],[4,58],[5,58],[6,58],[8,58],[9,58],[10,58],[11,58],[12,58],[14,58],[16,58],[18,58],[19,58],[20,58],[22,58],[23,58],[24,58],
             [4,59],[14,59],[16,59],[20,59],[24,59],
         ]
-        return maze
     }
 }
