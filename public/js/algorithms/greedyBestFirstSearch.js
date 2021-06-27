@@ -52,7 +52,7 @@ let greedyBestFirst = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         distance: lastNode.distance+weight,
-                        endDistance: distance(nextNodePosition, endPoint),
+                        endDistance: distance(nextNodePosition, endPoint)+weight,
                         prev: lastNode.position,
                         weight: 1
                     })
