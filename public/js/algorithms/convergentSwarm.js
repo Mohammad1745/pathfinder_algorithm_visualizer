@@ -6,7 +6,7 @@ let convergentSwarm = {
         solvedNodes.push({
             position: startingPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/heuristic,
+            heuristicDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         await activatePoint(startingPoint)
@@ -20,7 +20,7 @@ let convergentSwarm = {
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
             convergentSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristic)
-            unsolvedNodes.sort((a, b) => a.biasedDistance - b.biasedDistance)
+            unsolvedNodes.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
             if (!unsolvedNodes.length) return []
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
@@ -52,7 +52,7 @@ let convergentSwarm = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
-                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
+                        heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
                         prev: lastNode.position
                     })
                 }

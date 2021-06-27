@@ -8,13 +8,13 @@ let biDirectionalSwarm = {
         solvedNodesFromStart.push({
             position: startingPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/heuristic,
+            heuristicDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         solvedNodesFromEnd.push({
             position: endPoint,
             startDistance: 0,
-            biasedDistance: distance(startingPoint, endPoint)/heuristic,
+            heuristicDistance: distance(startingPoint, endPoint)/heuristic,
             prev: null
         })
         await activatePoint(startingPoint)
@@ -37,8 +37,8 @@ let biDirectionalSwarm = {
             ]
             biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromStart, unsolvedNodesFromStart, row, column, lastNodeFromStart, nextNodePositionsFromStart, wall, weights, heuristic, endPoint)
             biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, heuristic, startingPoint)
-            unsolvedNodesFromStart.sort((a, b) => a.biasedDistance - b.biasedDistance)
-            unsolvedNodesFromEnd.sort((a, b) => a.biasedDistance - b.biasedDistance)
+            unsolvedNodesFromStart.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
+            unsolvedNodesFromEnd.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
             if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return []
             let targetNodeFromStart = unsolvedNodesFromStart.shift()
             let targetNodeFromEnd = unsolvedNodesFromEnd.shift()
@@ -76,7 +76,7 @@ let biDirectionalSwarm = {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
-                        biasedDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
+                        heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)/heuristic,
                         prev: lastNode.position
                     })
                 }
