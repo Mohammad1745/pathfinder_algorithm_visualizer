@@ -54,9 +54,9 @@ let pattern = {
         let maze =  pattern.generateMaze(startingPoint, endPoint)
         maze = border.concat(maze)
         let antiMaze = pattern.generateAntiMaze({maze, row, column})
-        for(let index in antiMaze) {
-            if (startingPoint.equals(antiMaze[index]) || endPoint.equals(antiMaze[index])) {
-                antiMaze.splice(index, 1)
+        for(let i=0; i<antiMaze.length; i++) {
+            if (startingPoint.equals(antiMaze[i]) || endPoint.equals(antiMaze[i])) {
+                antiMaze.splice(i, 1)
             }
         }
         return antiMaze
