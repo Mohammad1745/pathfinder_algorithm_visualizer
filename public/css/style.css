@@ -10,6 +10,7 @@
     --initiate-wall: #555;
     --animate-wall: #ddd;
     --wall: #000;
+    --weight: #ca4;
 }
 /*body {*/
 /*    background-color: var(--primary);*/
@@ -110,6 +111,12 @@ App
     border-color: var(--wall);
     background-color: var(--wall);
     animation: wall .2s linear normal;
+}
+.node-weight {
+    color: var(--weight);
+    /*border-color: var(--weight);*/
+    /*background-color: var(--wall);*/
+    /*animation: wall .2s linear normal;*/
 }
 
 @keyframes activation {

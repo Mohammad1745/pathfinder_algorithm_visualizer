@@ -20,19 +20,24 @@ let speeds = {
     fast: {key:3, name:'Fast', speed: 10},
 }
 let mazes = {
-    recursiveMaze: {key: 1, name: "Recursive Division (Maze)"},
-    recursiveAntiMaze: {key: 2, name: "Recursive Division (Anti-Maze)"},
-    randomObstacle: {key: 3, name: "Random Obstacles"},
-    straightLine: {key: 4, name: "Straight Lines"},
-    simpleStair: {key: 6, name: "Simple Stair Pattern"},
-    none: {key: 7, name: "None"},
+    mazeWall: {key: 1, name: "Maze (Wall)"},
+    mazeWeight: {key: 2, name: "Maze (Weight)"},
+    antiMazeWall: {key: 3, name: "Anti-Maze (Wall)"},
+    antiMazeWeight: {key: 4, name: "Anti-Maze (Weight)"},
+    randomObstacle: {key: 5, name: "Random Obstacles (Wall)"},
+    randomWeights: {key: 6, name: "Random Obstacles (Weight)"},
+    straightLine: {key: 7, name: "Straight Lines (Wall)"},
+    straightWeightLine: {key: 8, name: "Straight Lines (Weight)"},
+    simpleStair: {key: 9, name: "Simple Stair Pattern (Wall)"},
+    simpleWeightStair: {key: 10, name: "Simple Stair Pattern (Weight)"},
+    none: {key: 11, name: "None"},
 }
 let menuSelected = menus.wall
 let mode = modes.initial
 let algorithm = algorithms.dijkstra
 let speed = speeds.average
 
-const WEIGHT_VALUE = 5
+const WEIGHT_VALUE = 10
 const WEIGHT_DEFAULT_VALUE = 1
 const MAZE_TIME = 20
 const PATH_TIME = 50
@@ -62,16 +67,23 @@ function handleUserEvent () {
 }
 
 function initiateMenuContent() {
-    let graph = document.querySelector('#graph')
-    if(graph.clientWidth<1305){
-        let algorithmButton = document.querySelector('#select_algorithm_btn')
-        let wallButton = document.querySelector('#wall_btn')
+    window.onresize = function(){
+        let graph = document.querySelector('#graph')
         let startingPointButton = document.querySelector('#starting_point_btn')
         let endPointButton = document.querySelector('#end_point_btn')
-        algorithmButton.innerHTML = "Algorithm"
-        wallButton.innerHTML = "Wall"
-        startingPointButton.innerHTML = "Starting Node"
-        endPointButton.innerHTML = "End Node"
+        let weightButton = document.querySelector('#weight_btn')
+        let wallButton = document.querySelector('#wall_btn')
+        if(graph.clientWidth<1307){
+            startingPointButton.innerHTML = "Starting Node"
+            endPointButton.innerHTML = "End Node"
+            wallButton.innerHTML = "Wall"
+            weightButton.innerHTML = "Weight"
+        } else {
+            startingPointButton.innerHTML = "Set Starting Node"
+            endPointButton.innerHTML = "Set End Node"
+            wallButton.innerHTML = "Add/Remove Wall"
+            weightButton.innerHTML = "Add/Remove Weight"
+        }
     }
 }
 
@@ -132,45 +144,91 @@ function algorithmInputHandler() {
 
 function mazeInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
-    let recursiveMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveMaze.key}`)
-    let recursiveAntiMazeButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.recursiveAntiMaze.key}`)
+    let mazeWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWall.key}`)
+    let mazeWeightButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWeight.key}`)
+    let antiMazeWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.antiMazeWall.key}`)
+    let antiMazeWeightButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.antiMazeWeight.key}`)
     let randomObstacleButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.randomObstacle.key}`)
+    let randomWeightsButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.randomWeights.key}`)
     let straightLineButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.straightLine.key}`)
+    let straightWeightLineButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.straightWeightLine.key}`)
     let simpleStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleStair.key}`)
+    let simpleWeightStairButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.simpleWeightStair.key}`)
     none.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            weights = []
             await plotMaze()
         }
     })
-    recursiveMazeButton.addEventListener('click', async () => {
+    mazeWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
+            weights = []
             wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
-    recursiveAntiMazeButton.addEventListener('click', async () => {
+    mazeWeightButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
+            wall = []
+            weights = pattern.recursiveMaze({row, column, startingPoint, endPoint})
+            await plotWeightedMaze()
+        }
+    })
+    antiMazeWallButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            weights = []
             wall = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
+    antiMazeWeightButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = []
+            weights = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
+            await plotWeightedMaze()
+        }
+    })
     randomObstacleButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
+            weights = []
             wall = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
+    randomWeightsButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = []
+            weights = pattern.randomObstacle({row, column, startingPoint, endPoint})
+            await plotWeightedMaze()
+        }
+    })
     straightLineButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
+            weights = []
             wall = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotMaze()
         }
     })
+    straightWeightLineButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = []
+            weights = pattern.straightLine({row, column, startingPoint, endPoint})
+            await plotWeightedMaze()
+        }
+    })
     simpleStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
+            weights = []
             wall = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotMaze()
+        }
+    })
+    simpleWeightStairButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            wall = []
+            weights = pattern.simpleStair({row, column, startingPoint, endPoint})
+            await plotWeightedMaze()
         }
     })
 }
@@ -236,29 +294,34 @@ function clearButtonHandler () {
         if (mode===modes.initial||mode===modes.done){
             let statusMessage = document.querySelector('#status_message')
             statusMessage.innerHTML = ''
-            clearGraph(true)
+            clearGraph(true, true)
             indicateStartingPoint()
             indicateEndPoint()
             wall = []
+            weights = []
             mode = modes.initial
         }
     })
 }
 
 function menuHandler() {
-    document.querySelector('#starting_point_btn').addEventListener('click', async event => {
+    let startingPointButton = document.querySelector('#starting_point_btn')
+    let endPointButton = document.querySelector('#end_point_btn')
+    let wallButton = document.querySelector('#wall_btn')
+    let weightButton = document.querySelector('#weight_btn')
+    startingPointButton.addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.start
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
-    document.querySelector('#end_point_btn').addEventListener('click', async event => {
+    endPointButton.addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.end
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
-    document.querySelector('#wall_btn').addEventListener('click', async event => {
+    wallButton.addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.wall
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
-    document.querySelector('#weight_btn').addEventListener('click', async event => {
+    weightButton.addEventListener('click', async event => {
         if (mode===modes.initial) menuSelected = menus.weight
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -271,6 +334,7 @@ function menuHandler() {
                 Number(event.target.getAttribute('data-column'))
             ]
             clearWall(startingPoint)
+            clearWeight(startingPoint)
             indicateStartingPoint()
         }
         else if (mode===modes.initial && menuSelected===menus.end){
@@ -280,6 +344,7 @@ function menuHandler() {
                 Number(event.target.getAttribute('data-column'))
             ]
             clearWall(endPoint)
+            clearWeight(endPoint)
             indicateEndPoint()
         }
         else if (mode===modes.initial && menuSelected===menus.wall){
@@ -337,12 +402,13 @@ function plotGraph() {
             let node = nodeRow.querySelector(`#node_${i}_${j}`)
             node.style.width = nodeSize+"px"
             node.style.height = nodeSize+"px"
+            node.style.fontSize = (nodeSize*2/3)+"px"
             if (j===column-1) node.style.borderRight = "#aaa solid 1px"
         }
     }
 }
 
-function clearGraph(clearWall=false) {
+function clearGraph(clearWall=false, clearWeight=false) {
     let graphBody = document.querySelector('#graph_body')
     let nodeSize = Math.floor(graphBody.offsetWidth/column-1)
     for (let i=0; i<row; i++) {
@@ -350,10 +416,13 @@ function clearGraph(clearWall=false) {
         for (let j=0; j<column; j++) {
             let node = nodeRow.querySelector(`#node_${i}_${j}`)
             if (clearWall) node.classList.remove('node-wall')
+            if (clearWeight) node.classList.remove('node-weight')
             node.classList.remove('node-active', 'node-path')
-            node.innerHTML=""
+            let isWeight = weights.filter(weight => weight.equals([i,j])).length>0
+            if ((clearWeight && isWeight) || !isWeight) node.innerHTML=""
             node.style.width = nodeSize+"px"
             node.style.height = nodeSize+"px"
+            node.style.fontSize = (nodeSize*2/3)+"px"
         }
     }
 }
@@ -363,7 +432,8 @@ function plotWall (event) {
         Number(event.target.getAttribute('data-row')),
         Number(event.target.getAttribute('data-column'))
     ]
-    if (!(point.equals(startingPoint)||point.equals(endPoint))){
+    let isWeight = weights.filter(weight => weight.equals(point)).length>0
+    if (!(isWeight || point.equals(startingPoint)||point.equals(endPoint))){
         let inWall = clearWall(point)
         if (!inWall) {
             wall.unshift(point)
@@ -389,7 +459,8 @@ function plotWeights (event) {
         Number(event.target.getAttribute('data-row')),
         Number(event.target.getAttribute('data-column'))
     ]
-    if (!(point.equals(startingPoint)||point.equals(endPoint))){
+    let isWall = wall.filter(brick => brick.equals(point)).length>0
+    if (!(isWall || point.equals(startingPoint)||point.equals(endPoint))){
         let inWeights = clearWeights(point)
         if (!inWeights) {
             weights.unshift(point)
@@ -411,7 +482,7 @@ function clearWeights (point) {
 }
 
 async function plotMaze () {
-    clearGraph(true)
+    clearGraph(true, true)
     indicateStartingPoint()
     indicateEndPoint()
     for(let point of wall) {
@@ -423,6 +494,22 @@ async function plotMaze () {
         await sleep(Math.round(MAZE_TIME/speed.speed))
         // node.classList.remove('node-initiate-wall')
         node.classList.add('node-wall')
+    }
+}
+
+async function plotWeightedMaze () {
+    clearGraph(true, true)
+    indicateStartingPoint()
+    indicateEndPoint()
+    for(let point of weights) {
+        let node = document
+            .querySelector('#graph_body')
+            .querySelector(`#node_row_${point[0]}`)
+            .querySelector(`#node_${point[0]}_${point[1]}`)
+        // node.classList.add('node-initiate-wall')
+        await sleep(Math.round(MAZE_TIME/speed.speed))
+        // node.classList.remove('node-initiate-wall')
+        indicateWeight(point)
     }
 }
 
@@ -491,6 +578,7 @@ function indicateWeight(point) {
         .querySelector(`#node_${point[0]}_${point[1]}`)
     node.innerHTML=""
     node.insertAdjacentHTML('beforeend', `<i class="fas fa-weight-hanging"></i>`)
+    node.classList.add('node-weight')
 }
 
 function clearWeight(point) {

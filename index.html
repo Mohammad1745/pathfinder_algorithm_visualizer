@@ -35,20 +35,17 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="select_algorithm_btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Algorithm
+                        Algorithm
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="algorithm_list">
                         <!-- algorithm list -->
                     </div>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link ml-2 btn btn-outline-success" id="wall_btn">Add / Remove Wall</button>
+                    <button class="nav-link ml-2 btn btn-outline-success" id="starting_point_btn">Set Starting Node</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link ml-2 btn btn-outline-success" id="starting_point_btn">Select Starting Node</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link ml-2 btn btn-outline-success" id="end_point_btn">Select End Node</button>
+                    <button class="nav-link ml-2 btn btn-outline-success" id="end_point_btn">Set End Node</button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link ml-2 btn btn-primary font-weight-bold" id="visualize_btn">Visualize</button>
@@ -57,7 +54,10 @@
                     <button class="nav-link ml-2 btn btn-danger" id="clear_btn">Clear</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link ml-2 btn btn-outline-success" id="weight_btn">Add Weight</button>
+                    <button class="nav-link ml-2 btn btn-outline-success" id="wall_btn">Add / Remove Wall</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link ml-2 btn btn-outline-success" id="weight_btn">Add / Remove Weight</button>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle ml-2" href="#" id="maze_pattern_btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -87,7 +87,7 @@
                 <div class="ml-3 text-light">|</div>
                 <div class="node-example text-white ml-3" id="end_node_example"><i class="fa fa-bullseye" aria-hidden="true"></i></div><div class="text-light ml-2">End Node</div>
                 <div class="ml-3 text-light">|</div>
-                <div class="node-example text-white ml-3" id="weight_node_example"><i class="fas fa-weight-hanging"></i></div><div class="text-light ml-2">Weight Node</div>
+                <div class="node-weight node-example ml-3" id="weight_node_example"><i class="fas fa-weight-hanging"></i></div><div class="text-light ml-2">Weight Node</div>
                 <div class="ml-3 text-light">|</div>
                 <div class="node node-active node-example ml-3" id="visited_node_example_1"></div>
                 <div class="node node-path node-example ml-1" id="visited_node_example_2"></div>
