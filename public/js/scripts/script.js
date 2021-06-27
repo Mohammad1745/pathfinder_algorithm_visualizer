@@ -488,8 +488,8 @@ function plotWeights (event) {
 
 function clearWeights (point) {
     let isWeight = false
-    weights.map((brick, index) => {
-        if (point.equals(brick)){
+    weights.map((weight, index) => {
+        if (point.equals(weight)){
             weights.splice(index, 1)
             clearWeight(point)
             isWeight = true
@@ -593,8 +593,7 @@ function indicateWeight(point) {
         .querySelector('#graph_body')
         .querySelector(`#node_row_${point[0]}`)
         .querySelector(`#node_${point[0]}_${point[1]}`)
-    node.innerHTML=""
-    node.insertAdjacentHTML('beforeend', `<i class="fas fa-weight-hanging"></i>`)
+    node.insertAdjacentHTML('beforeend', `<i class="fas fa-weight-hanging" data-row="${point[0]}" data-column="${point[1]}"></i>`)
     node.classList.add('node-weight')
 }
 
@@ -604,6 +603,7 @@ function clearWeight(point) {
         .querySelector(`#node_row_${point[0]}`)
         .querySelector(`#node_${point[0]}_${point[1]}`)
     node.innerHTML=""
+    node.classList.remove('node-weight')
 }
 
 async function visualizeShortestPath(shortestPath) {
