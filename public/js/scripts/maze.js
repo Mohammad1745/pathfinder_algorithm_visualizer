@@ -15,6 +15,14 @@ let pattern = {
         return maze;
     },
 
+    straightLine: ({row, column, startingPoint, endPoint}) => {
+        let shuffler = Math.round(Math.random()*4)
+        if (shuffler===0) return pattern.verticalWall({row, column, startingPoint, endPoint})
+        else if (shuffler===1) return pattern.horizontalWall({row, column, startingPoint, endPoint})
+        else if (shuffler===2) return pattern.ascendingWall({row, column, startingPoint, endPoint})
+        else return pattern.descendingWall({row, column, startingPoint, endPoint})
+    },
+
     verticalWall: ({row, column, startingPoint, endPoint}) => {
         let maze = []
         for (let c=7; c<column; c+=7) {
