@@ -8,9 +8,9 @@ The app is here: https://mohammad1745.github.io/pathfinder_algorithm_visualizer 
 
 This application supports the following algorithms:
 
-**Dijkstra's Algorithm** : The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all.
+**Dijkstra's Algorithm** : The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all. <a href="https://youtu.be/GazC3A4OQTE" target="_blank">Learn more...</a>
 
-**A*** **Search** : Arguably the best pathfinding algorithm. It uses heuristics to guarantee the shortest path much faster than Dijkstra's Algorithm. The algorithm takes into account of the distance from end node . So, it searches the direction of the end node more than that of others.
+**A*** **Search** : Arguably the best pathfinding algorithm. It uses heuristics to guarantee the shortest path much faster than Dijkstra's Algorithm. The algorithm takes into account of the distance from end node . So, it searches the direction of the end node more than that of others. <a href="https://youtu.be/ySN5Wnu88nE" target="_blank">Learn more...</a>
 
 **Greedy Best-first Search** : A faster, more heuristic-heavy version of A*. It does not guarantee the shortest path. The algorithm takes into account of the distance from end node and searches the direction of the end node first then the other directions.
 
