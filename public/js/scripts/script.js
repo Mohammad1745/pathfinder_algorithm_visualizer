@@ -67,23 +67,29 @@ function handleUserEvent () {
 }
 
 function initiateMenuContent() {
+    let graph = document.querySelector('#graph')
+    let startingPointButton = document.querySelector('#starting_point_btn')
+    let endPointButton = document.querySelector('#end_point_btn')
+    let weightButton = document.querySelector('#weight_btn')
+    let wallButton = document.querySelector('#wall_btn')
+
+    changeMenuContent({graph, startingPointButton, endPointButton, weightButton, wallButton})
     window.onresize = function(){
-        let graph = document.querySelector('#graph')
-        let startingPointButton = document.querySelector('#starting_point_btn')
-        let endPointButton = document.querySelector('#end_point_btn')
-        let weightButton = document.querySelector('#weight_btn')
-        let wallButton = document.querySelector('#wall_btn')
-        if(graph.clientWidth<1307){
-            startingPointButton.innerHTML = "Starting Node"
-            endPointButton.innerHTML = "End Node"
-            wallButton.innerHTML = "Wall"
-            weightButton.innerHTML = "Weight"
-        } else {
-            startingPointButton.innerHTML = "Set Starting Node"
-            endPointButton.innerHTML = "Set End Node"
-            wallButton.innerHTML = "Add/Remove Wall"
-            weightButton.innerHTML = "Add/Remove Weight"
-        }
+        changeMenuContent({graph, startingPointButton, endPointButton, weightButton, wallButton})
+    }
+}
+
+function changeMenuContent ({graph, startingPointButton, endPointButton, weightButton, wallButton}) {
+    if(graph.clientWidth<1307){
+        startingPointButton.innerHTML = "Starting Node"
+        endPointButton.innerHTML = "End Node"
+        wallButton.innerHTML = "Wall"
+        weightButton.innerHTML = "Weight"
+    } else {
+        startingPointButton.innerHTML = "Set Starting Node"
+        endPointButton.innerHTML = "Set End Node"
+        wallButton.innerHTML = "Add/Remove Wall"
+        weightButton.innerHTML = "Add/Remove Weight"
     }
 }
 
