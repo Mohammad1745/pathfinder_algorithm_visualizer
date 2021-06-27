@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function handleUserEvent () {
     algorithmInputHandler()
-    mazeInputHandler()
+    patternInputHandler()
     speedInputHandler()
     visualizerButtonHandler()
     clearButtonHandler()
@@ -148,7 +148,7 @@ function algorithmInputHandler() {
     })
 }
 
-function mazeInputHandler() {
+function patternInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
     let mazeWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWall.key}`)
     let mazeWeightButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWeight.key}`)
@@ -166,6 +166,7 @@ function mazeInputHandler() {
             weights = []
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     mazeWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -173,6 +174,7 @@ function mazeInputHandler() {
             wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     mazeWeightButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -180,6 +182,7 @@ function mazeInputHandler() {
             weights = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     antiMazeWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -187,6 +190,7 @@ function mazeInputHandler() {
             wall = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     antiMazeWeightButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -194,6 +198,7 @@ function mazeInputHandler() {
             weights = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     randomObstacleButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -201,6 +206,7 @@ function mazeInputHandler() {
             wall = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     randomWeightsButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -208,6 +214,7 @@ function mazeInputHandler() {
             weights = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     straightLineButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -215,6 +222,7 @@ function mazeInputHandler() {
             wall = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     straightWeightLineButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -222,6 +230,7 @@ function mazeInputHandler() {
             weights = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     simpleStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -229,6 +238,7 @@ function mazeInputHandler() {
             wall = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     simpleWeightStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
@@ -236,6 +246,7 @@ function mazeInputHandler() {
             weights = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
         }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
 }
 function speedInputHandler() {
