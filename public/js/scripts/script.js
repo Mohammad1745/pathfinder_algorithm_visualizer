@@ -37,6 +37,7 @@ const SEARCH_TIME = 20
 const CLEAR_GRAPH_MESSAGE = "Clear Graph First"
 
 document.addEventListener('DOMContentLoaded', () => {
+    initiateMenuContent()
     showAlgorithmList()
     showMazeList()
     showSpeedList()
@@ -55,6 +56,19 @@ function handleUserEvent () {
     clearButtonHandler()
     menuHandler()
     algorithmInfoHandler()
+}
+function initiateMenuContent() {
+    let graph = document.querySelector('#graph')
+    if(graph.clientWidth<1305){
+        let algorithmButton = document.querySelector('#select_algorithm_btn')
+        let wallButton = document.querySelector('#wall_btn')
+        let startingPointButton = document.querySelector('#starting_point_btn')
+        let endPointButton = document.querySelector('#end_point_btn')
+        algorithmButton.innerHTML = "Algorithm"
+        wallButton.innerHTML = "Wall"
+        startingPointButton.innerHTML = "Starting Node"
+        endPointButton.innerHTML = "End Node"
+    }
 }
 
 function showAlgorithmList() {
