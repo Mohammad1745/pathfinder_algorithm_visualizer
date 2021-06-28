@@ -4,7 +4,7 @@ let greedyBestFirst = {
         let unsolvedNodes = []
         solvedNodes.push({
             position: startingPoint,
-            distance: 0,
+            startDistance: 0,
             endDistance: distance(startingPoint, endPoint),
             prev: null,
             weight: WEIGHT_DEFAULT_VALUE
@@ -44,14 +44,14 @@ let greedyBestFirst = {
                 let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
                 let weight = isWeight ? WEIGHT_VALUE : WEIGHT_DEFAULT_VALUE
                 if (matchedUnsolvedNode[0]) {
-                    if (lastNode.distance+weight < matchedUnsolvedNode.distance) {
-                        matchedUnsolvedNode.distance = lastNode.distance+weight
+                    if (lastNode.startDistance+weight < matchedUnsolvedNode.startDistance) {
+                        matchedUnsolvedNode.startDistance = lastNode.startDistance+weight
                         matchedUnsolvedNode.prev = lastNode.position
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
-                        distance: lastNode.distance+weight,
+                        startDistance: lastNode.startDistance+weight,
                         endDistance: distance(nextNodePosition, endPoint)+weight,
                         prev: lastNode.position,
                         weight

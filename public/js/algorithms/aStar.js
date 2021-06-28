@@ -2,10 +2,11 @@ let aStar = {
     search: async ({row, column, weights, wall, startingPoint, endPoint}) => {
         let solvedNodes = []
         let unsolvedNodes = []
+        let heuristics = 1
         solvedNodes.push({
             position: startingPoint,
-            distance: 0,
-            queuedDistance: distance(startingPoint, endPoint),
+            startDistance: 0,
+            heuristicDistance: distance(startingPoint, endPoint)*heuristics,
             prev: null,
             weight: WEIGHT_DEFAULT_VALUE
         })
@@ -19,8 +20,8 @@ let aStar = {
                 [lastNode.position[0] + 1, lastNode.position[1]],
                 [lastNode.position[0] - 1, lastNode.position[1]],
             ]
-            aStar.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
-            unsolvedNodes.sort((a, b) => a.queuedDistance - b.queuedDistance)
+            aStar.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristics)
+            unsolvedNodes.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
             if (!unsolvedNodes.length) return {}
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
@@ -34,7 +35,7 @@ let aStar = {
         }
     },
 
-    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights) => {
+    updateUnsolvedNodesWithShortestDistance : (solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristics) => {
         nextNodePositions.map(nextNodePosition => {
             let isNodeValid = nextNodePosition[0] >= 0 && nextNodePosition[0] < row && nextNodePosition[1] >= 0 && nextNodePosition[1] < column
             let isWallBrick = wall.filter(brick => nextNodePosition.equals(brick)).length > 0
@@ -44,15 +45,15 @@ let aStar = {
                 let matchedUnsolvedNode = unsolvedNodes.filter(node => node.position.equals(nextNodePosition))
                 let weight = isWeight ? WEIGHT_VALUE : WEIGHT_DEFAULT_VALUE
                 if (matchedUnsolvedNode[0]) {
-                    if (lastNode.distance + weight < matchedUnsolvedNode.distance) {
-                        matchedUnsolvedNode.distance = lastNode.distance + weight
+                    if (lastNode.startDistance + weight < matchedUnsolvedNode.startDistance) {
+                        matchedUnsolvedNode.startDistance = lastNode.startDistance + weight
                         matchedUnsolvedNode.prev = lastNode.position
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
-                        distance: lastNode.distance + weight,
-                        queuedDistance: lastNode.distance + weight + distance(nextNodePosition, endPoint),
+                        startDistance: lastNode.startDistance + weight,
+                        heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)*heuristics,
                         prev: lastNode.position,
                         weight
                     })
