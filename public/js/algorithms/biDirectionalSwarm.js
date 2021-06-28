@@ -4,6 +4,7 @@ let biDirectionalSwarm = {
         let unsolvedNodesFromStart = []
         let solvedNodesFromEnd = []
         let unsolvedNodesFromEnd = []
+        let animation = []
         let heuristics = 0.45
         solvedNodesFromStart.push({
             position: startingPoint,
@@ -19,8 +20,8 @@ let biDirectionalSwarm = {
             prev: null,
             weight: WEIGHT_DEFAULT_VALUE
         })
-        await activatePoint(startingPoint)
-        await activatePoint(endPoint)
+        animation.unshift(startingPoint)
+        animation.unshift(endPoint)
 
         while (true) {
             let lastNodeFromStart = solvedNodesFromStart[solvedNodesFromStart.length - 1]
@@ -41,21 +42,26 @@ let biDirectionalSwarm = {
             biDirectionalSwarm.updateUnsolvedNodesWithShortestDistance(solvedNodesFromEnd, unsolvedNodesFromEnd, row, column, lastNodeFromEnd, nextNodePositionsFromEnd, wall, weights, heuristics, startingPoint)
             unsolvedNodesFromStart.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
             unsolvedNodesFromEnd.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
-            if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) return {}
+            if (!unsolvedNodesFromStart.length || !unsolvedNodesFromEnd.length) {
+                animation.reverse()
+                return {animation}
+            }
             let targetNodeFromStart = unsolvedNodesFromStart.shift()
             let targetNodeFromEnd = unsolvedNodesFromEnd.shift()
             let matchedSolvedNodeFromStart = solvedNodesFromStart.filter(node => node.position.equals(targetNodeFromStart.position)).length > 0
             let matchedSolvedNodeFromEnd = solvedNodesFromEnd.filter(node => node.position.equals(targetNodeFromEnd.position)).length > 0
             if (!matchedSolvedNodeFromStart) {
                 solvedNodesFromStart.push(targetNodeFromStart)
-                await activatePoint(targetNodeFromStart.position, Math.round(SEARCH_TIME/speed.speed))
+                animation.unshift(targetNodeFromStart.position)
             }if (!matchedSolvedNodeFromEnd) {
                 solvedNodesFromEnd.push(targetNodeFromEnd)
-                await activatePoint(targetNodeFromEnd.position, Math.round(SEARCH_TIME/speed.speed))
+                animation.unshift(targetNodeFromEnd.position)
             }
             let duplicateNodes = biDirectionalSwarm.duplicateNodes(solvedNodesFromStart, solvedNodesFromEnd)
             if (duplicateNodes) {
-                return biDirectionalSwarm.extractShortestPath(solvedNodesFromStart, solvedNodesFromEnd, duplicateNodes)
+                animation.reverse()
+                let {path, weight} = biDirectionalSwarm.extractShortestPath(solvedNodesFromStart, solvedNodesFromEnd, duplicateNodes)
+                return {path, weight, animation}
             }
         }
     },

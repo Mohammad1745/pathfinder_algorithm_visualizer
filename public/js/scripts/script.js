@@ -280,27 +280,33 @@ function visualizerButtonHandler () {
         mode = modes.searching
         statusMessage.innerHTML = ''
         statusMessage.insertAdjacentHTML('beforeend', `Searching <i class="fas fa-spinner"></i>`)
-        let shortestPath = {}
+        let result = {}
         if (algorithm.key===algorithms.dijkstra.key) {
-            shortestPath = await dijkstra.search({row, column, weights, wall,startingPoint, endPoint})
+            result = await dijkstra.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.aStar.key) {
-            shortestPath = await aStar.search({row, column, weights, wall,startingPoint, endPoint})
+            result = await aStar.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.greedyBestFirstSearch.key) {
-            shortestPath = await greedyBestFirst.search({row, weights, column, wall,startingPoint, endPoint})
+            result = await greedyBestFirst.search({row, weights, column, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.swarm.key) {
-            shortestPath = await swarm.search({row, column, weights, wall,startingPoint, endPoint})
+            result = await swarm.search({row, column, weights, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.convergentSwarm.key) {
-            shortestPath = await convergentSwarm.search({row, weights, column, wall,startingPoint, endPoint})
+            result = await convergentSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
         else if (algorithm.key===algorithms.biDirectionalSwarm.key) {
-            shortestPath = await biDirectionalSwarm.search({row, weights, column, wall,startingPoint, endPoint})
+            result = await biDirectionalSwarm.search({row, weights, column, wall,startingPoint, endPoint})
         }
-        statusMessage.innerHTML = shortestPath.hasOwnProperty('weight') ? `Weighted Distance: ${shortestPath.weight}` : `No Path Available`
-        await visualizeShortestPath(shortestPath.path)
+        if (result.hasOwnProperty('path')){
+            await visualizeSearchAnimation(result.animation)
+            statusMessage.innerHTML = `Weighted Distance: ${result.weight}`
+            await visualizeShortestPath(result.path)
+        }else{
+            await visualizeSearchAnimation(result.animation)
+            statusMessage.innerHTML = `No Path Available`
+        }
         mode = modes.done
     })
 }
@@ -604,6 +610,12 @@ function clearWeight(point) {
         .querySelector(`#node_${point[0]}_${point[1]}`)
     node.innerHTML=""
     node.classList.remove('node-weight')
+}
+
+async function visualizeSearchAnimation(animation) {
+    for(let point of animation) {
+        await activatePoint(point, Math.round(SEARCH_TIME/speed.speed))
+    }
 }
 
 async function visualizeShortestPath(shortestPath) {

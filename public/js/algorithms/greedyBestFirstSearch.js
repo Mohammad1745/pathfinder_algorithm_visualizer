@@ -2,6 +2,7 @@ let greedyBestFirst = {
     search: async ({row, column, weights, wall, startingPoint, endPoint}) => {
         let solvedNodes = []
         let unsolvedNodes = []
+        let animation = []
         solvedNodes.push({
             position: startingPoint,
             startDistance: 0,
@@ -9,7 +10,7 @@ let greedyBestFirst = {
             prev: null,
             weight: WEIGHT_DEFAULT_VALUE
         })
-        await activatePoint(startingPoint)
+        animation.unshift(startingPoint)
 
         while (true) {
             let lastNode = solvedNodes[solvedNodes.length-1]
@@ -21,15 +22,20 @@ let greedyBestFirst = {
             ]
             greedyBestFirst.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights)
             unsolvedNodes.sort((a, b) => a.endDistance-b.endDistance)
-            if (!unsolvedNodes.length) return {}
+            if (!unsolvedNodes.length) {
+                animation.reverse()
+                return {animation}
+            }
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length>0
             if (!matchedSolvedNode) {
                 solvedNodes.push(targetNode)
-                await activatePoint(targetNode.position, Math.round(SEARCH_TIME/speed.speed))
+                animation.unshift(targetNode.position)
             }
             if (targetNode.position.equals(endPoint)) {
-                return greedyBestFirst.extractShortestPath(solvedNodes, targetNode)
+                animation.reverse()
+                let {path, weight} = greedyBestFirst.extractShortestPath(solvedNodes, targetNode)
+                return {path, weight, animation}
             }
         }
     },

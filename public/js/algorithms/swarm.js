@@ -2,6 +2,7 @@ let swarm = {
     search: async ({row, column, weights, wall, startingPoint, endPoint}) => {
         let solvedNodes = []
         let unsolvedNodes = []
+        let animation = []
         let heuristics = 0.45
         solvedNodes.push({
             position: startingPoint,
@@ -10,7 +11,7 @@ let swarm = {
             prev: null,
             weight: WEIGHT_DEFAULT_VALUE
         })
-        await activatePoint(startingPoint)
+        animation.unshift(startingPoint)
 
         while (true) {
             let lastNode = solvedNodes[solvedNodes.length - 1]
@@ -22,15 +23,20 @@ let swarm = {
             ]
             swarm.updateUnsolvedNodesWithShortestDistance(solvedNodes, unsolvedNodes, row, column, lastNode, nextNodePositions, wall, weights, heuristics)
             unsolvedNodes.sort((a, b) => a.heuristicDistance - b.heuristicDistance)
-            if (!unsolvedNodes.length) return {}
+            if (!unsolvedNodes.length) {
+                animation.reverse()
+                return {animation}
+            }
             let targetNode = unsolvedNodes.shift()
             let matchedSolvedNode = solvedNodes.filter(node => node.position.equals(targetNode.position)).length > 0
             if (!matchedSolvedNode) {
                 solvedNodes.push(targetNode)
-                await activatePoint(targetNode.position, Math.round(SEARCH_TIME/speed.speed))
+                animation.unshift(targetNode.position)
             }
             if (targetNode.position.equals(endPoint)) {
-                return swarm.extractShortestPath(solvedNodes, targetNode)
+                animation.reverse()
+                let {path, weight} = swarm.extractShortestPath(solvedNodes, targetNode)
+                return {path, weight, animation}
             }
         }
     },
