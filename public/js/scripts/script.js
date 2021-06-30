@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showMazeList()
     showSpeedList()
     updateVisualizerButton()
+    updateAlgorithmInfo()
     plotGraph()
     indicateStartingPoint()
     indicateEndPoint()
@@ -125,26 +126,32 @@ function algorithmInputHandler() {
     dijkstraAlgorithm.addEventListener('click', () => {
         algorithm = algorithms.dijkstra
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
     aStarSearch.addEventListener('click', () => {
         algorithm = algorithms.aStar
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
     greedyBestFirstSearch.addEventListener('click', () => {
         algorithm = algorithms.greedyBestFirstSearch
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
     swarm.addEventListener('click', () => {
         algorithm = algorithms.swarm
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
     convergentSwarm.addEventListener('click', () => {
         algorithm = algorithms.convergentSwarm
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
     biDirectionalSwarm.addEventListener('click', () => {
         algorithm = algorithms.biDirectionalSwarm
         updateVisualizerButton()
+        updateAlgorithmInfo()
     })
 }
 
@@ -392,10 +399,6 @@ function algorithmInfoHandler() {
     let algorithmInfoButton = document.querySelector('#graph_header').querySelector('.algorithm-info-btn')
     algorithmInfoButton.addEventListener('click', event => {
         let algorithmInfo = document.querySelector('#algorithm_info')
-        let algorithmInfoHeader = document.querySelector('#algorithm_info_header')
-        let algorithmInfoBody = document.querySelector('#algorithm_info_body')
-        algorithmInfoHeader.innerHTML = algorithm.name+" Algorithm"
-        algorithmInfoBody.innerHTML = algorithm.description
         algorithmInfo.style.display = "flex"
     })
     let algorithmInfoCancelButton = document.querySelector('#algorithm_info_cancel_btn')
@@ -412,6 +415,13 @@ function updateVisualizerButton() {
     algorithmMessage.innerHTML = `${algorithm.name} Algorithm`
     let statusMessage = document.querySelector('#status_message')
     statusMessage.innerHTML = ``
+}
+
+function updateAlgorithmInfo() {
+    let algorithmInfoHeader = document.querySelector('#algorithm_info_header')
+    let algorithmInfoBody = document.querySelector('#algorithm_info_body')
+    algorithmInfoHeader.innerHTML = algorithm.name+" Algorithm"
+    algorithmInfoBody.innerHTML = algorithm.description
 }
 
 function plotGraph() {
