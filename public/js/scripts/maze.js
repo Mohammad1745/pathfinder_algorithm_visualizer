@@ -1,4 +1,25 @@
 let pattern = {
+    googleEarth: ({row, column, startingPoint, endPoint}) => {
+        let maze = []
+        let increment = 5
+        for (let startColumn=1; startColumn<column; startColumn++){
+            increment = randomNumber(2,4)
+            for (let c = startColumn; c < startColumn+increment && c < column; c++) {
+                for (let startRow=1; startRow<column; startRow++){
+                    for (let r=startRow; r<startRow+increment && r < row; r++){
+                        if (!(startingPoint.equals([r, c]) || endPoint.equals([r, c])) && (r === startRow || r === startRow+increment-1 || c === startColumn || c === startColumn+increment-1)) {
+                            maze.unshift({coordinate: [r, c], type: 'wall'})
+                        }
+                    }
+                    startRow += increment
+                }
+            }
+            startColumn += increment
+        }
+        maze.reverse()
+        return maze;
+    },
+
     simpleStair: ({row, column, startingPoint, endPoint}) => {
         let maze = []
         let r = row-3
@@ -133,28 +154,11 @@ let pattern = {
 
     generateBorder: ({row, column, startingPoint, endPoint}) => {
         let border = []
-        let r=0
-        for (let c=0; c<column; c++) {
-            if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                border.unshift([r, c])
-            }
-        }
-        let c=column-1
         for (let r=0; r<row; r++) {
-            if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                border.unshift([r, c])
-            }
-        }
-        r=row-1
-        for (let c=column-1; c>=0; c--) {
-            if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                border.unshift([r, c])
-            }
-        }
-        c=0
-        for (let r=row-1; r>=0; r--) {
-            if (!(startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
-                border.unshift([r, c])
+            for (let c=0; c<column; c++) {
+                if (!(startingPoint.equals([r, c]) || endPoint.equals([r, c])) && (r===0||r===row-1 || c===0||c===column-1)) {
+                    border.unshift([r, c])
+                }
             }
         }
         border.reverse()

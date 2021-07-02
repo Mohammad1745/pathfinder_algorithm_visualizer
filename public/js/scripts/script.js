@@ -20,17 +20,18 @@ let speeds = {
     fast: {key:3, name:'Fast', speed: 10},
 }
 let mazes = {
-    mazeWall: {key: 1, name: "Maze (Wall)"},
-    mazeWeight: {key: 2, name: "Maze (Weight)"},
-    antiMazeWall: {key: 3, name: "Anti-Maze (Wall)"},
-    antiMazeWeight: {key: 4, name: "Anti-Maze (Weight)"},
-    randomObstacle: {key: 5, name: "Random Obstacles (Wall)"},
-    randomWeights: {key: 6, name: "Random Obstacles (Weight)"},
-    straightLine: {key: 7, name: "Straight Lines (Wall)"},
-    straightWeightLine: {key: 8, name: "Straight Lines (Weight)"},
-    simpleStair: {key: 9, name: "Simple Stair Pattern (Wall)"},
-    simpleWeightStair: {key: 10, name: "Simple Stair Pattern (Weight)"},
-    none: {key: 11, name: "None"},
+    googleEarth: {key: 1, name: "Google Earth"},
+    mazeWall: {key: 2, name: "Maze (Wall)"},
+    mazeWeight: {key: 3, name: "Maze (Weight)"},
+    antiMazeWall: {key: 4, name: "Anti-Maze (Wall)"},
+    antiMazeWeight: {key: 5, name: "Anti-Maze (Weight)"},
+    randomObstacle: {key: 6, name: "Random Obstacles (Wall)"},
+    randomWeights: {key: 7, name: "Random Obstacles (Weight)"},
+    straightLine: {key: 8, name: "Straight Lines (Wall)"},
+    straightWeightLine: {key: 9, name: "Straight Lines (Weight)"},
+    simpleStair: {key: 10, name: "Simple Stair Pattern (Wall)"},
+    simpleWeightStair: {key: 11, name: "Simple Stair Pattern (Weight)"},
+    none: {key: 12, name: "None"},
 }
 let menuSelected = menus.wall
 let mode = modes.initial
@@ -157,6 +158,7 @@ function algorithmInputHandler() {
 
 function patternInputHandler() {
     let none = document.querySelector('#maze_list').querySelector(`#maze_${mazes.none.key}`)
+    let googleEarthButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.googleEarth.key}`)
     let mazeWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWall.key}`)
     let mazeWeightButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.mazeWeight.key}`)
     let antiMazeWallButton = document.querySelector('#maze_list').querySelector(`#maze_${mazes.antiMazeWall.key}`)
@@ -172,6 +174,15 @@ function patternInputHandler() {
             wall = []
             weights = []
             await plotMaze()
+        }
+        else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
+    })
+    googleEarthButton.addEventListener('click', async () => {
+        if (mode===modes.initial) {
+            weights = []
+            wall = []
+            let earthPattern = pattern.googleEarth({row, column, startingPoint, endPoint})
+            await plotGoogleEarth(earthPattern)
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -543,6 +554,27 @@ async function plotWeightedMaze () {
         await sleep(Math.round(MAZE_TIME/speed.speed))
         // node.classList.remove('node-initiate-wall')
         indicateWeight(point)
+    }
+}
+
+async function plotGoogleEarth (points) {
+    clearGraph(true, true)
+    indicateStartingPoint()
+    indicateEndPoint()
+    for(let point of points) {
+        if (point.type==='wall') {
+            wall.unshift(point.coordinate)
+            let node = document
+                .querySelector('#graph_body')
+                .querySelector(`#node_row_${point.coordinate[0]}`)
+                .querySelector(`#node_${point.coordinate[0]}_${point.coordinate[1]}`)
+            await sleep(Math.round(MAZE_TIME/speed.speed))
+            node.classList.add('node-wall')
+        } else {
+            weights.unshift(point.coordinate)
+            await sleep(Math.round(MAZE_TIME/speed.speed))
+            indicateWeight(point.coordinate)
+        }
     }
 }
 
