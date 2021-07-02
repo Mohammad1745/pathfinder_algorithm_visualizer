@@ -5,7 +5,7 @@ let endPoint = [Math.round(row/2-1), column-Math.round(row/2+1)]
 let wall = []
 let weights = []
 let menus = {start: 1, end: 2, wall: 3, weight: 4}
-let modes = {initial: 1, searching: 2, done:3}
+let modes = {initial: 1, plotting: 2, searching: 3, done:4}
 let algorithms = {
     dijkstra: {key: 1, name: "Dijkstra's", description: `The father of pathfinding algorithms. It guarantees the shortest path. The algorithm doesn't have any idea about the location of end point. So, it searches every direction equally. That's why, it's the slowest of all. <a href="https://youtu.be/GazC3A4OQTE" target="_blank">Learn more...</a>`},
     aStar: {key:2, name: "A* Search", description: `Arguably the best pathfinding algorithm. It uses heuristics to guarantee the shortest path much faster than Dijkstra's Algorithm. The algorithm takes into account of the distance from end node . So, it searches the direction of the end node more than that of others. <a href="https://youtu.be/ySN5Wnu88nE" target="_blank">Learn more...</a>`},
@@ -173,7 +173,9 @@ function patternInputHandler() {
         if (mode===modes.initial) {
             wall = []
             weights = []
+            mode = modes.plotting
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -181,88 +183,110 @@ function patternInputHandler() {
         if (mode===modes.initial) {
             weights = []
             wall = []
+            mode = modes.plotting
             let earthPattern = pattern.googleEarth({row, column, startingPoint, endPoint})
             await plotGoogleEarth(earthPattern)
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     mazeWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             weights = []
+            mode = modes.plotting
             wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     mazeWeightButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            mode = modes.plotting
             weights = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     antiMazeWallButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             weights = []
+            mode = modes.plotting
             wall = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     antiMazeWeightButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            mode = modes.plotting
             weights = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     randomObstacleButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             weights = []
+            mode = modes.plotting
             wall = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     randomWeightsButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            mode = modes.plotting
             weights = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     straightLineButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             weights = []
+            mode = modes.plotting
             wall = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     straightWeightLineButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            mode = modes.plotting
             weights = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     simpleStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             weights = []
+            mode = modes.plotting
             wall = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
     simpleWeightStairButton.addEventListener('click', async () => {
         if (mode===modes.initial) {
             wall = []
+            mode = modes.plotting
             weights = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
+            mode = mode.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
