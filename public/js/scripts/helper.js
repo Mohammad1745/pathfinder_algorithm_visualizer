@@ -11,10 +11,10 @@ Array.prototype.equals = function(arr2) {
 }
 
 const randomNumber = (min, max, except=null) => {
-    let number = Math.floor(min+Math.random()*max)
+    let number = Math.round(min+Math.random()*max)
     if (except) {
         while (number===except){
-            number = Math.floor(min+Math.random()*max)
+            number = Math.round(min+Math.random()*max)
         }
     }
     return number;

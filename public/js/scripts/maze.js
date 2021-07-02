@@ -1,23 +1,8 @@
 let pattern = {
     googleEarth: ({row, column, startingPoint, endPoint}) => {
-        let maze = []
-        let increment = 5
-        for (let startColumn=1; startColumn<column; startColumn++){
-            increment = randomNumber(2,4)
-            for (let c = startColumn; c < startColumn+increment && c < column; c++) {
-                for (let startRow=1; startRow<column; startRow++){
-                    for (let r=startRow; r<startRow+increment && r < row; r++){
-                        if (!(startingPoint.equals([r, c]) || endPoint.equals([r, c])) && (r === startRow || r === startRow+increment-1 || c === startColumn || c === startColumn+increment-1)) {
-                            maze.unshift({coordinate: [r, c], type: 'wall'})
-                        }
-                    }
-                    startRow += increment
-                }
-            }
-            startColumn += increment
-        }
-        maze.reverse()
-        return maze;
+        let plots = pattern.earthPlots({row, column, startingPoint, endPoint})
+        let traffic = pattern.traffic({plots, row, column, startingPoint, endPoint})
+        return plots.concat(traffic);
     },
 
     simpleStair: ({row, column, startingPoint, endPoint}) => {
@@ -150,6 +135,41 @@ let pattern = {
         }
         maze.reverse()
         return maze;
+    },
+
+    earthPlots: ({row, column, startingPoint, endPoint}) => {
+        let plots = []
+        let increment = 5
+        for (let startColumn=1; startColumn<column; startColumn++){
+            increment = randomNumber(2,8)
+            for (let c = startColumn; c < startColumn+increment && c < column; c++) {
+                for (let startRow=0; startRow<column; startRow++){
+                    for (let r=startRow; r<startRow+increment && r < row; r++){
+                        if (!(startingPoint.equals([r, c]) || endPoint.equals([r, c]))) {
+                            plots.push({coordinate: [r, c], type: 'wall'})
+                        }
+                    }
+                    startRow += increment
+                }
+            }
+            startColumn += increment
+        }
+        return plots
+    },
+
+    traffic: ({plots, row, column, startingPoint, endPoint}) => {
+        let traffic = []
+        let shuffler = Math.floor(Math.random() * 3 + 2)
+        for (let i=0; i<row*column/shuffler; i++) {
+            let r = Math.floor(Math.random() * (row-1))
+            let c = Math.floor(Math.random() * (column-1))
+            let matched = traffic.filter(point => point.coordinate.equals([r, c])).length
+            if (!matched) matched = plots.filter(point => point.coordinate.equals([r,c])).length
+            if (!(matched || startingPoint.equals([r,c]) || endPoint.equals([r,c]))) {
+                traffic.push({coordinate: [r, c], type: "weight"})
+            }
+        }
+        return traffic
     },
 
     generateBorder: ({row, column, startingPoint, endPoint}) => {
