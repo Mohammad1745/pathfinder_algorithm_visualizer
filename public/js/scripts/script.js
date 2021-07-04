@@ -175,7 +175,7 @@ function patternInputHandler() {
             weights = []
             mode = modes.plotting
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -186,7 +186,7 @@ function patternInputHandler() {
             mode = modes.plotting
             let earthPattern = pattern.googleEarth({row, column, startingPoint, endPoint})
             await plotGoogleEarth(earthPattern)
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -196,7 +196,7 @@ function patternInputHandler() {
             mode = modes.plotting
             wall = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -206,7 +206,7 @@ function patternInputHandler() {
             mode = modes.plotting
             weights = pattern.recursiveMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -216,7 +216,7 @@ function patternInputHandler() {
             mode = modes.plotting
             wall = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -226,7 +226,7 @@ function patternInputHandler() {
             mode = modes.plotting
             weights = pattern.recursiveAntiMaze({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -236,7 +236,7 @@ function patternInputHandler() {
             mode = modes.plotting
             wall = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -246,7 +246,7 @@ function patternInputHandler() {
             mode = modes.plotting
             weights = pattern.randomObstacle({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -256,7 +256,7 @@ function patternInputHandler() {
             mode = modes.plotting
             wall = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -266,7 +266,7 @@ function patternInputHandler() {
             mode = modes.plotting
             weights = pattern.straightLine({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -276,7 +276,7 @@ function patternInputHandler() {
             mode = modes.plotting
             wall = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
@@ -286,7 +286,7 @@ function patternInputHandler() {
             mode = modes.plotting
             weights = pattern.simpleStair({row, column, startingPoint, endPoint})
             await plotWeightedMaze()
-            mode = mode.initial
+            mode = modes.initial
         }
         else if (mode === modes.done) alert(CLEAR_GRAPH_MESSAGE)
     })
