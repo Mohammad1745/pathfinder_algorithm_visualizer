@@ -53,14 +53,14 @@ let swarm = {
                 if (matchedUnsolvedNode[0]) {
                     if (lastNode.startDistance + weight < matchedUnsolvedNode.startDistance) {
                         matchedUnsolvedNode.startDistance = lastNode.startDistance + weight
-                        matchedUnsolvedNode.prev = lastNode.position
+                        matchedUnsolvedNode.prev = lastNode
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         startDistance: lastNode.startDistance + weight,
                         heuristicDistance: (lastNode.startDistance + weight) + distance(nextNodePosition, endPoint)*heuristics,
-                        prev: lastNode.position,
+                        prev: lastNode,
                         weight
                     })
                 }
@@ -75,7 +75,7 @@ let swarm = {
             weight += lastNode.weight
             path.unshift(lastNode.position)
             if (!lastNode.prev) break
-            lastNode = solvedNodes.filter(node => node.position.equals(lastNode.prev))[0]
+            lastNode = lastNode.prev
         }
         return {path, weight}
     }
