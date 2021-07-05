@@ -51,13 +51,13 @@ let dijkstra = {
                 if (matchedUnsolvedNode[0]) {
                     if (lastNode.distance + weight < matchedUnsolvedNode.distance) {
                         matchedUnsolvedNode.distance = lastNode.distance + weight
-                        matchedUnsolvedNode.prev = lastNode.position
+                        matchedUnsolvedNode.prev = lastNode
                     }
                 } else {
                     unsolvedNodes.push({
                         position: nextNodePosition,
                         distance: lastNode.distance + weight,
-                        prev: lastNode.position,
+                        prev: lastNode,
                         weight
                     })
                 }
@@ -72,7 +72,7 @@ let dijkstra = {
             weight += lastNode.weight
             path.unshift(lastNode.position)
             if (!lastNode.prev) break
-            lastNode = solvedNodes.filter(node => node.position.equals(lastNode.prev))[0]
+            lastNode = lastNode.prev
         }
         return {path, weight}
     }
