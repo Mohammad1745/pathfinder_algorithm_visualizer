@@ -37,6 +37,7 @@ let menuSelected = menus.wall
 let mode = modes.initial
 let algorithm = algorithms.dijkstra
 let speed = speeds.average
+let mouseDown = false
 
 const WEIGHT_VALUE = 10
 const WEIGHT_DEFAULT_VALUE = 1
@@ -413,21 +414,31 @@ function menuHandler() {
             indicateEndPoint()
         }
         else if (mode===modes.initial && menuSelected===menus.wall){
+            mouseDown = true
             plotWall(event)
         }
         else if (mode===modes.initial && menuSelected===menus.weight){
+            mouseDown = true
             plotWeights(event)
         }
     })
     graphBody = document.querySelector('#graph_body')
-    graphBody.addEventListener('dragenter', event => {
-        if (mode===modes.initial && menuSelected===menus.wall){
-            plotWall(event)
-        }
-        else if (mode===modes.initial && menuSelected===menus.weight){
-            plotWeights(event)
+    graphBody.addEventListener('mouseup', event => {
+        if (mouseDown){
+            mouseDown = false
         }
     })
+    let nodes = document.querySelector('#graph_body').querySelectorAll('.node')
+    for (let node of nodes) {
+        node.addEventListener('mouseenter', event => {
+            if ((mode===modes.initial && menuSelected===menus.wall) && mouseDown){
+                plotWall(event)
+            }
+            else if ((mode===modes.initial && menuSelected===menus.weight) && mouseDown){
+                plotWeights(event)
+            }
+        })
+    }
 }
 
 function algorithmInfoHandler() {
